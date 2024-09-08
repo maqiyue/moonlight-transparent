@@ -20,7 +20,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -34,6 +33,9 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.core.content.FileProvider;
+
 import com.google.gson.Gson;
 import com.limelight.DebugInfoActivity;
 import com.su.moonlight.next.BuildConfig;

@@ -6,7 +6,6 @@ package com.limelight.binding.input.virtual_controller.keyboard;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;

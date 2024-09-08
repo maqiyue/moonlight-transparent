@@ -90,6 +90,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.ComponentActivity;
+
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -101,9 +103,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import com.su.moonlight.next.R;
+import com.su.moonlight.next.game.pref.PerformanceInfo;
+import com.su.moonlight.next.game.pref.PerformanceOverlayView;
 
 
-public class Game extends Activity implements SurfaceHolder.Callback,
+public class Game extends ComponentActivity implements SurfaceHolder.Callback,
         OnGenericMotionListener, OnTouchListener, NvConnectionListener, EvdevListener,
         OnSystemUiVisibilityChangeListener, GameGestures, StreamView.InputCallbacks,
         PerfOverlayListener, UsbDriverService.UsbDriverStateListener, View.OnKeyListener{
@@ -177,11 +181,7 @@ public class Game extends Activity implements SurfaceHolder.Callback,
     private boolean isHidingOverlays;
     private TextView notificationOverlayView;
     private int requestedNotificationOverlayVisibility = View.GONE;
-    private View performanceOverlayView;
-
-    private TextView performanceOverlayLite;
-
-    private TextView performanceOverlayBig;
+    private PerformanceOverlayView performanceOverlayView;
 
     private MediaCodecDecoderRenderer decoderRenderer;
     private boolean reportedCrash;
@@ -343,10 +343,7 @@ public class Game extends Activity implements SurfaceHolder.Callback,
         notificationOverlayView = findViewById(R.id.notificationOverlay);
 
         performanceOverlayView = findViewById(R.id.performanceOverlay);
-
-        performanceOverlayLite = findViewById(R.id.performanceOverlayLite);
-
-        performanceOverlayBig = findViewById(R.id.performanceOverlayBig);
+        performanceOverlayView.initConfig(prefConfig);
 
         inputCaptureProvider = InputCaptureManager.getInputCaptureProvider(this, this);
 
@@ -449,14 +446,14 @@ public class Game extends Activity implements SurfaceHolder.Callback,
         // Check if the user has enabled performance stats overlay
         if (prefConfig.enablePerfOverlay) {
             performanceOverlayView.setVisibility(View.VISIBLE);
-            if(prefConfig.enablePerfOverlayLite){
-                performanceOverlayLite.setVisibility(View.VISIBLE);
-                if(prefConfig.enablePerfOverlayLiteDialog){
-                    performanceOverlayLite.setOnClickListener(v -> showGameMenu(null));
-                }
-            }else{
-                performanceOverlayBig.setVisibility(View.VISIBLE);
-            }
+//            if(prefConfig.enablePerfOverlayLite){
+//                performanceOverlayLite.setVisibility(View.VISIBLE);
+//                if(prefConfig.enablePerfOverlayLiteDialog){
+//                    performanceOverlayLite.setOnClickListener(v -> showGameMenu(null));
+//                }
+//            }else{
+//                performanceOverlayBig.setVisibility(View.VISIBLE);
+//            }
         }
 
         decoderRenderer = new MediaCodecDecoderRenderer(
@@ -3047,17 +3044,18 @@ public class Game extends Activity implements SurfaceHolder.Callback,
     }
 
     @Override
-    public void onPerfUpdate(final String text) {
+    public void onPerfUpdate(final PerformanceInfo info) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(prefConfig.enablePerfOverlayLite){
-                    performanceOverlayLite.setText(text);
-                }else{
-                    performanceOverlayBig.setText(text);
-                }
+//                if(prefConfig.enablePerfOverlayLite){
+//                    performanceOverlayLite.setText(text);
+//                }else{
+//                    performanceOverlayBig.setText(info);
+//                }
             }
         });
+        performanceOverlayView.submitInfo(info);
     }
 
     @Override
@@ -3189,11 +3187,11 @@ public class Game extends Activity implements SurfaceHolder.Callback,
         prefConfig.enablePerfOverlay=!prefConfig.enablePerfOverlay;
         if(prefConfig.enablePerfOverlay){
             performanceOverlayView.setVisibility(View.VISIBLE);
-            if(prefConfig.enablePerfOverlayLite){
-                performanceOverlayLite.setVisibility(View.VISIBLE);
-            }else{
-                performanceOverlayBig.setVisibility(View.VISIBLE);
-            }
+//            if(prefConfig.enablePerfOverlayLite){
+//                performanceOverlayLite.setVisibility(View.VISIBLE);
+//            }else{
+//                performanceOverlayBig.setVisibility(View.VISIBLE);
+//            }
             return;
         }
         performanceOverlayView.setVisibility(View.GONE);

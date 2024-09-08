@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/performanceOverlay"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@android:color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/performanceOverlayBig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="left"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:gravity="left"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="#80000000"
+        android:preferKeepClear="true" />
+
+    <TextView
+        android:id="@+id/performanceOverlayLite"
+        tools:text="延迟/解码：109ms/7ms 丢包率：69% FPS：60"
+        android:textSize="10sp"
+        android:background="@drawable/ic_hud_bg"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

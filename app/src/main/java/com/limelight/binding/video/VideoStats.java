@@ -2,20 +2,20 @@ package com.limelight.binding.video;
 
 import android.os.SystemClock;
 
-class VideoStats {
+public class VideoStats {
 
-    long decoderTimeMs;
-    long totalTimeMs;
-    int totalFrames;
-    int totalFramesReceived;
-    int totalFramesRendered;
-    int frameLossEvents;
-    int framesLost;
-    char minHostProcessingLatency;
-    char maxHostProcessingLatency;
-    int totalHostProcessingLatency;
-    int framesWithHostProcessingLatency;
-    long measurementStartTimestamp;
+    public long decoderTimeMs;
+    public long totalTimeMs;
+    public int totalFrames;
+    public int totalFramesReceived;
+    public int totalFramesRendered;
+    public int frameLossEvents;
+    public int framesLost;
+    public char minHostProcessingLatency;
+    public char maxHostProcessingLatency;
+    public int totalHostProcessingLatency;
+    public int framesWithHostProcessingLatency;
+    public long measurementStartTimestamp;
 
     void add(VideoStats other) {
         this.decoderTimeMs += other.decoderTimeMs;
@@ -72,7 +72,7 @@ class VideoStats {
         this.measurementStartTimestamp = 0;
     }
 
-    VideoStatsFps getFps() {
+    public VideoStatsFps getFps() {
         float elapsed = (SystemClock.uptimeMillis() - this.measurementStartTimestamp) / (float) 1000;
 
         VideoStatsFps fps = new VideoStatsFps();
@@ -83,11 +83,4 @@ class VideoStats {
         }
         return fps;
     }
-}
-
-class VideoStatsFps {
-
-    float totalFps;
-    float receivedFps;
-    float renderedFps;
 }

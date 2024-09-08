@@ -21,8 +21,6 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.limelight.AppView;
-import com.limelight.Game;
 import com.su.moonlight.next.R;
 import com.limelight.nvstream.http.ComputerDetails;
 import com.limelight.preferences.PreferenceConfiguration;

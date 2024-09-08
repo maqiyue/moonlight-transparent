@@ -4,7 +4,6 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
 import com.su.moonlight.next.BuildConfig;
 

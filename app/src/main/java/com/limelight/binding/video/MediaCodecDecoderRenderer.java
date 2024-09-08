@@ -20,6 +20,7 @@ import com.limelight.nvstream.av.video.VideoDecoderRenderer;
 import com.limelight.nvstream.jni.MoonBridge;
 import com.limelight.preferences.PreferenceConfiguration;
 import com.limelight.utils.TrafficStatsHelper;
+import com.su.moonlight.next.game.pref.PerformanceInfo;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -1432,7 +1433,6 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
                 VideoStats lastTwo = new VideoStats();
                 lastTwo.add(lastWindowVideoStats);
                 lastTwo.add(activeWindowVideoStats);
-                VideoStatsFps fps = lastTwo.getFps();
                 String decoder;
 
                 if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H264) != 0) {
@@ -1445,55 +1445,12 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
                     decoder = "(unknown)";
                 }
 
-                float decodeTimeMs = (float)lastTwo.decoderTimeMs / lastTwo.totalFramesReceived;
-                long rttInfo = MoonBridge.getEstimatedRttInfo();
-                StringBuilder sb = new StringBuilder();
-                if(prefs.enablePerfOverlayLite){
-                    if(TrafficStatsHelper.getPackageRxBytes(Process.myUid())!= TrafficStats.UNSUPPORTED){
-                        long netData=TrafficStatsHelper.getPackageRxBytes(Process.myUid())+TrafficStatsHelper.getPackageTxBytes(Process.myUid());
-                        if(lastNetDataNum!=0){
-                            sb.append(context.getString(R.string.perf_overlay_lite_bandwidth) + ": ");
-                            float realtimeNetData=(netData-lastNetDataNum)/1024f;
-                            if(realtimeNetData>=1000){
-                                sb.append(String.format("%.2f", realtimeNetData/1024f) +"M/s\t ");
-                            }else{
-                                sb.append(String.format("%.2f", realtimeNetData) +"K/s\t ");
-                            }
-                        }
-                        lastNetDataNum=netData;
-                    }
-//                    sb.append("分辨率：");
-//                    sb.append(initialWidth + "x" + initialHeight);
-                    sb.append(context.getString(R.string.perf_overlay_lite_network_decoding_delay) + ": ");
-                    sb.append(context.getString(R.string.perf_overlay_lite_net,(int)(rttInfo >> 32)));
-                    sb.append(" / ");
-                    sb.append(context.getString(R.string.perf_overlay_lite_dectime,decodeTimeMs));
-                    sb.append("\t");
-                    sb.append(context.getString(R.string.perf_overlay_lite_packet_loss) + ": ");
-                    sb.append(context.getString(R.string.perf_overlay_lite_netdrops,(float)lastTwo.framesLost / lastTwo.totalFrames * 100));
-                    sb.append("\t FPS：");
-                    sb.append(context.getString(R.string.perf_overlay_lite_fps,fps.totalFps));
-//                    sb.append("\n");
-//                    sb.append(context.getString(R.string.perf_overlay_lite_decoder,decoder));
-                }else{
-                    sb.append(context.getString(R.string.perf_overlay_streamdetails, initialWidth + "x" + initialHeight, fps.totalFps)).append('\n');
-                    sb.append(context.getString(R.string.perf_overlay_decoder, decoder)).append('\n');
-                    sb.append(context.getString(R.string.perf_overlay_incomingfps, fps.receivedFps)).append('\n');
-                    sb.append(context.getString(R.string.perf_overlay_renderingfps, fps.renderedFps)).append('\n');
-                    sb.append(context.getString(R.string.perf_overlay_netdrops,
-                            (float)lastTwo.framesLost / lastTwo.totalFrames * 100)).append('\n');
-                    sb.append(context.getString(R.string.perf_overlay_netlatency,
-                            (int)(rttInfo >> 32), (int)rttInfo)).append('\n');
-                    if (lastTwo.framesWithHostProcessingLatency > 0) {
-                        sb.append(context.getString(R.string.perf_overlay_hostprocessinglatency,
-                                (float)lastTwo.minHostProcessingLatency / 10,
-                                (float)lastTwo.maxHostProcessingLatency / 10,
-                                (float)lastTwo.totalHostProcessingLatency / 10 / lastTwo.framesWithHostProcessingLatency)).append('\n');
-                    }
-                    sb.append(context.getString(R.string.perf_overlay_dectime, decodeTimeMs));
-                }
+                long netData = TrafficStatsHelper.getPackageRxBytes(Process.myUid()) + TrafficStatsHelper.getPackageTxBytes(Process.myUid());
+                long netDataDelta = lastNetDataNum != 0 ? netData - lastNetDataNum : netData;
+                lastNetDataNum = netData;
 
-                perfListener.onPerfUpdate(sb.toString());
+                perfListener.onPerfUpdate(
+                        PerformanceInfo.create(lastTwo,initialWidth,initialHeight,netDataDelta,decoder,MoonBridge.getEstimatedRttInfo()));
             }
 
             globalVideoStats.add(activeWindowVideoStats);
