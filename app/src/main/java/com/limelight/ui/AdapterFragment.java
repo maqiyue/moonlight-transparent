@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
-import com.limelight.R;
+import com.su.moonlight.next.R;
 
 public class AdapterFragment extends Fragment {
     private AdapterFragmentCallbacks callbacks;

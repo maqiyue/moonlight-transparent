@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.limelight.ui.StreamView;
+import com.su.moonlight.next.R;
 
 /**
  * Description
@@ -24,7 +25,7 @@ public class SecondaryDisplayPresentation extends Presentation {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = (FrameLayout) View.inflate(getContext(),R.layout.activity_game_display,null);
+        view = (FrameLayout) View.inflate(getContext(), R.layout.activity_game_display,null);
         setContentView(view);
     }
 

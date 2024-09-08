@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 
-import com.limelight.R;
+import com.su.moonlight.next.R;
 import com.limelight.utils.UiHelper;
 
 

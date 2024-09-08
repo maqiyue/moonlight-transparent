@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import com.limelight.AppView;
 import com.limelight.LimeLog;
-import com.limelight.R;
 import com.limelight.grid.assets.CachedAppAssetLoader;
 import com.limelight.grid.assets.DiskAssetLoader;
 import com.limelight.grid.assets.MemoryAssetLoader;
 import com.limelight.grid.assets.NetworkAssetLoader;
 import com.limelight.nvstream.http.ComputerDetails;
 import com.limelight.preferences.PreferenceConfiguration;
+import com.su.moonlight.next.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

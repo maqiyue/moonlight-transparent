@@ -1,18 +1,21 @@
 apply plugin: 'com.android.application'
 
+def appName = "MoonlightNext"
+def appPackage = "com.su.moonlight.next"
+
 android {
     ndkVersion "27.0.12077973"
 
     compileSdk 34
 
-    namespace 'com.limelight'
+    namespace appPackage
 
     defaultConfig {
         minSdk 21
         targetSdk 34
 
-        versionName "12.1-artemis-240903"
-        versionCode = 15
+        versionName "1.0"
+        versionCode = 1
 
         // Generate native debug symbols to allow Google Play to symbolicate our native crashes
         ndk.debugSymbolLevel = 'FULL'
@@ -36,7 +39,7 @@ android {
                 }
             }
 
-            applicationId "com.limelight.root"
+            applicationId "${appPackage}.root"
             dimension "root"
             buildConfigField "boolean", "ROOT_BUILD", "true"
         }
@@ -48,7 +51,7 @@ android {
                 }
             }
 
-            applicationId "com.limelight"
+            applicationId appPackage
             dimension "root"
             buildConfigField "boolean", "ROOT_BUILD", "false"
         }
@@ -81,9 +84,9 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".noirdebug"
-            resValue "string", "app_label", "Diana"
-            resValue "string", "app_label_root", "Diana (Root)"
+            applicationIdSuffix ".debug"
+            resValue "string", "app_label", appName
+            resValue "string", "app_label_root", "${appName} (Root)"
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -119,9 +122,9 @@ android {
             // is to please change the applicationId before you publish.
             //
             // TL;DR: Leave the following line alone!
-            applicationIdSuffix ".noir"
-            resValue "string", "app_label", "Artemis"
-            resValue "string", "app_label_root", "Artemis (Root)"
+            applicationIdSuffix ".release"
+            resValue "string", "app_label", appName
+            resValue "string", "app_label_root", "${appName} (Root)"
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

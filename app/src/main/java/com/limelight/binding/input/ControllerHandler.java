@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 import com.limelight.GameMenu;
 import com.limelight.LimeLog;
-import com.limelight.R;
+import com.su.moonlight.next.R;
 import com.limelight.binding.input.driver.AbstractController;
 import com.limelight.binding.input.driver.UsbDriverListener;
 import com.limelight.binding.input.driver.UsbDriverService;

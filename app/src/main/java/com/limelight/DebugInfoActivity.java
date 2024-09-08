@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.limelight.utils.DeviceUtils;
+import com.su.moonlight.next.R;
 
 import java.util.ArrayList;
 import java.util.List;

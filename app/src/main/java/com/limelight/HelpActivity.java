@@ -10,6 +10,7 @@ import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 
 import com.limelight.utils.SpinnerDialog;
+import com.su.moonlight.next.R;
 
 public class HelpActivity extends Activity {
 

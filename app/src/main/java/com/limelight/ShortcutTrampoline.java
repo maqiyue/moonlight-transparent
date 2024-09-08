@@ -21,6 +21,7 @@ import com.limelight.utils.Dialog;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.SpinnerDialog;
 import com.limelight.utils.UiHelper;
+import com.su.moonlight.next.R;
 
 import org.xmlpull.v1.XmlPullParserException;
 

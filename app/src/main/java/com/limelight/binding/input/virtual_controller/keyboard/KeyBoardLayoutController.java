@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.limelight.Game;
-import com.limelight.R;
+import com.su.moonlight.next.R;
 import com.limelight.preferences.PreferenceConfiguration;
 
 import java.util.BitSet;

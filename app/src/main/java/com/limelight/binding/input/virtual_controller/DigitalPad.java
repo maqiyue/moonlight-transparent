@@ -16,7 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 
 import com.limelight.LimeLog;
-import com.limelight.R;
+import com.su.moonlight.next.R;
 import com.limelight.preferences.PreferenceConfiguration;
 
 import java.util.ArrayList;

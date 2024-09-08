@@ -27,6 +27,7 @@ import com.limelight.utils.HelpLauncher;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.UiHelper;
+import com.su.moonlight.next.R;
 
 import android.app.Activity;
 import android.app.ActivityManager;

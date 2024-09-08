@@ -13,9 +13,9 @@ import org.jcodec.codecs.h264.H264Utils;
 import org.jcodec.codecs.h264.io.model.SeqParameterSet;
 import org.jcodec.codecs.h264.io.model.VUIParameters;
 
-import com.limelight.BuildConfig;
+import com.su.moonlight.next.BuildConfig;
 import com.limelight.LimeLog;
-import com.limelight.R;
+import com.su.moonlight.next.R;
 import com.limelight.nvstream.av.video.VideoDecoderRenderer;
 import com.limelight.nvstream.jni.MoonBridge;
 import com.limelight.preferences.PreferenceConfiguration;

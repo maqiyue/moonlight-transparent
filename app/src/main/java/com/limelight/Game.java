@@ -100,6 +100,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import com.su.moonlight.next.R;
 
 
 public class Game extends Activity implements SurfaceHolder.Callback,

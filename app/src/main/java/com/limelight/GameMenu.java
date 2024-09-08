@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.su.moonlight.next.R;
 
 /**
  * Provide options for ongoing Game Stream.

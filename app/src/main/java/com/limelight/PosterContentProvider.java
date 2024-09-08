@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
 import com.limelight.grid.assets.DiskAssetLoader;
+import com.su.moonlight.next.BuildConfig;
 
 import java.io.File;
 import java.io.FileNotFoundException;
