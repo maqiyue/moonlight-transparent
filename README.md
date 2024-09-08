@@ -1,13 +1,12 @@
-# Artemis Android
+# Moonlight-Next
 
-Previously named Moonlight Noir
+基于[Artemis](https://github.com/ClassicOldSong/moonlight-android)优化开发的下一代月光串流客户端，致力于提升使用体验。
 
-An open source client for [Apollo](https://github.com/ClassicOldSong/Apollo)/[Sunshine](https://github.com/LizardByte/Sunshine).
+配合后端[Apollo (推荐)](https://github.com/ClassicOldSong/Apollo)/[Sunshine](https://github.com/LizardByte/Sunshine)使用。
 
-Artemis Android will allow you to stream your collection of games from your Windows PC to your Android device,
-whether in your own home or over the internet.
+Based on [Artemis](https://github.com/ClassicOldSong/moonlight-android) optimized development of the next generation of moonlight streaming client, dedicated to improving the use of experience.
 
-Artemis is currently the best fork of Moonlight with loads of optimizations for office usage.
+Used in conjunction with the back-end [Apollo (recommended)](https://github.com/ClassicOldSong/Apollo)/[Sunshine](https://github.com/LizardByte/Sunshine).
 
 # Features
 
@@ -48,24 +47,12 @@ Also checkout https://github.com/ClassicOldSong/Widecar if you want a seamless e
 
 A more seamless experience with virtual display will be Artemis paired with [Apollo](https://github.com/ClassicOldSong/Apollo).
 
-# Disclaimer
-
-This is the `go away` version of Moonlight Android.
-
-I got kicked from Moonlight and Sunshine's Discord server literally for helping people out.
-
-![image](https://github.com/user-attachments/assets/f01fc57f-5199-4495-9b96-68cfa017b7ff)
-
-This is what I got for finding a bug, opened an issue, getting no response, troubleshoot myself, fixed the issue myself, shared it by PR to the main repo hoping my efforts can help someone else during the maintainance gap.
-
-Yes, I'm going away. Fixes and improvements on this fork are not necessarily be merged to the main repo either. I have also started [a fork of Sunshine called Apollo](https://github.com/ClassicOldSong/Apollo) and will add useful features that will never get merged by the main repo shortly. [Apollo](https://github.com/ClassicOldSong/Apollo) and [Moonlight Noir](https://github.com/ClassicOldSong/moonlight-android) will no longer be compatible with OG Sunshine and OG Moonlight eventually, but they'll work even better with much more carefully designed features.
-
-The main repo had stayed silent for 5 months, with nobody actually responding to issues, and people are getting totally no help besides the limited FAQ in their Discord server. I tried to answer issues and questions, solve problems within my ablilty but I got kicked out just for helping others. The funniest thing is, the repo starts updating after they got me banned!
-
-**PRs for feature improvements are welcomed here unlike the main repo, your ideas are more likely to be appreciated and your efforts are actually being respected. We welcome people who can and willing to share their efforts, helping yourselves and other people in need.**
-
 ## Downloads
-* [APK](https://github.com/ClassicOldSong/moonlight-android/releases)
+* [APK](https://github.com/RyensX/moonlight-next/releases)
+
+如果你觉得还不错，请点个⭐star以支持作者持续更新
+
+If you think it's good, please click ⭐star to support the author to keep updating!
 
 ## Building
 * Install Android Studio and the Android NDK
