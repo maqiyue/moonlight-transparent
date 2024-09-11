@@ -28,7 +28,8 @@ jobs:
     - name: Set NDK
       uses: nttld/setup-ndk@v1
       with:
-       ndk-version: 27.0.12077973
+       ndk-version: r27
+       local-cache: true
     - run: ndk-build NDK_PROJECT_PATH=. 
 
     - name: Set Cache
