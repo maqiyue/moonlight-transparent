@@ -25,6 +25,12 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
+    - name: Set NDK
+      uses: nttld/setup-ndk@v1
+      with:
+       ndk-version: 27.0.12077973
+      run: ndk-build NDK_PROJECT_PATH=. 
+
     - name: Set Cache
       uses: actions/cache@v3
       with:
