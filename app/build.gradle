@@ -162,7 +162,7 @@ dependencies {
     def composeBom = platform('androidx.compose:compose-bom:2024.06.00')
     implementation composeBom
     androidTestImplementation composeBom
-    
+
     // Material Design 3
     implementation 'androidx.compose.material3:material3'
     // or Material Design 2
@@ -194,4 +194,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
+
+    //test ci pkg
 }
