@@ -30,7 +30,7 @@ jobs:
       with:
        ndk-version: r27
        local-cache: true
-    - run: ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk
+       link-to-sdk: true
 
     - name: Set Cache
       uses: actions/cache@v3
