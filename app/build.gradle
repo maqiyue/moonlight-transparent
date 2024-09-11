@@ -32,8 +32,6 @@ android {
 
     productFlavors {
         root {
-            // Android O has native mouse capture, so don't show the rooted
-            // version to devices running O on the Play Store.
             maxSdk 25
 
             externalNativeBuild {
@@ -164,8 +162,7 @@ dependencies {
     def composeBom = platform('androidx.compose:compose-bom:2024.06.00')
     implementation composeBom
     androidTestImplementation composeBom
-
-    // Choose one of the following:
+    
     // Material Design 3
     implementation 'androidx.compose.material3:material3'
     // or Material Design 2
