@@ -91,6 +91,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -103,11 +104,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import com.su.moonlight.next.R;
+import com.su.moonlight.next.game.menu.GameMenuPanel;
 import com.su.moonlight.next.game.pref.PerformanceInfo;
 import com.su.moonlight.next.game.pref.PerformanceOverlayView;
 
 
-public class Game extends ComponentActivity implements SurfaceHolder.Callback,
+public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         OnGenericMotionListener, OnTouchListener, NvConnectionListener, EvdevListener,
         OnSystemUiVisibilityChangeListener, GameGestures, StreamView.InputCallbacks,
         PerfOverlayListener, UsbDriverService.UsbDriverStateListener, View.OnKeyListener{
@@ -3197,6 +3199,10 @@ public class Game extends ComponentActivity implements SurfaceHolder.Callback,
         performanceOverlayView.setVisibility(View.GONE);
     }
 
+    public boolean isEnablePerformanceOverlay() {
+        return performanceOverlayView.getVisibility() == View.VISIBLE;
+    }
+
     //切换触控灵敏度开关
     public void switchTouchSensitivity(){
         prefConfig.enableTouchSensitivity=!prefConfig.enableTouchSensitivity;
@@ -3226,7 +3232,7 @@ public class Game extends ComponentActivity implements SurfaceHolder.Callback,
 
     @Override
     public void showGameMenu(GameInputDevice device) {
-        new GameMenu(this, conn, device);
+        new GameMenuPanel(this, conn, device);
     }
 
 

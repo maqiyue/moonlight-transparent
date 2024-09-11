@@ -3,7 +3,6 @@ package com.limelight;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
@@ -21,6 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import com.su.moonlight.next.R;
+import com.su.moonlight.next.game.menu.options.MenuOption;
 
 /**
  * Provide options for ongoing Game Stream.
@@ -35,22 +35,6 @@ public class GameMenu {
     public static final String PREF_NAME = "specialPrefs"; // SharedPreferences的名称
 
     public static final String KEY_NAME = "special_key"; // 要保存的键名称
-
-    public static class MenuOption {
-        private final String label;
-        private final boolean withGameFocus;
-        private final Runnable runnable;
-
-        public MenuOption(String label, boolean withGameFocus, Runnable runnable) {
-            this.label = label;
-            this.withGameFocus = withGameFocus;
-            this.runnable = runnable;
-        }
-
-        public MenuOption(String label, Runnable runnable) {
-            this(label, false, runnable);
-        }
-    }
 
     private final Game game;
     private final NvConnection conn;

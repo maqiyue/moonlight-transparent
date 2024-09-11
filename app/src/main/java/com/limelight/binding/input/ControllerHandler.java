@@ -33,7 +33,6 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.widget.Toast;
 
-import com.limelight.GameMenu;
 import com.limelight.LimeLog;
 import com.su.moonlight.next.R;
 import com.limelight.binding.input.driver.AbstractController;
@@ -46,6 +45,7 @@ import com.limelight.nvstream.jni.MoonBridge;
 import com.limelight.preferences.PreferenceConfiguration;
 import com.limelight.ui.GameGestures;
 import com.limelight.utils.Vector2d;
+import com.su.moonlight.next.game.menu.options.MenuOption;
 
 import org.cgutman.shieldcontrollerextensions.SceChargingState;
 import org.cgutman.shieldcontrollerextensions.SceConnectionType;
@@ -2998,9 +2998,9 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
         };
 
         @Override
-        public List<GameMenu.MenuOption> getGameMenuOptions() {
-            List<GameMenu.MenuOption> options = new ArrayList<>();
-            options.add(new GameMenu.MenuOption(activityContext.getString(mouseEmulationActive ?
+        public List<MenuOption> getGameMenuOptions() {
+            List<MenuOption> options = new ArrayList<>();
+            options.add(new MenuOption(activityContext.getString(mouseEmulationActive ?
                     R.string.game_menu_toggle_mouse_off : R.string.game_menu_toggle_mouse_on),
                     true, () -> toggleMouseEmulation()));
 

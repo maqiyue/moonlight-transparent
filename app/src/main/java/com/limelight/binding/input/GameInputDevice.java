@@ -1,6 +1,6 @@
 package com.limelight.binding.input;
 
-import com.limelight.GameMenu;
+import com.su.moonlight.next.game.menu.options.MenuOption;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface GameInputDevice {
     /**
      * @return list of device specific game menu options, e.g. configure a controller's mouse mode
      */
-    List<GameMenu.MenuOption> getGameMenuOptions();
+    List<MenuOption> getGameMenuOptions();
 }
