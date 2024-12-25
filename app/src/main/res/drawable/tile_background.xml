@@ -1,0 +1,7 @@
+<bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/a"
+    android:gravity="center"
+    android:tileMode="disabled"
+    android:antialias="true"
+    android:scaleType="fitCenter" />

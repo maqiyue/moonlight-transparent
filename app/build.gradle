@@ -11,8 +11,8 @@ android {
         minSdk 21
         targetSdk 34
 
-        versionName "12.1-artemis-241031"
-        versionCode = 31
+        versionName "12.1-artemis-241032"
+        versionCode = 32
 
         // Generate native debug symbols to allow Google Play to symbolicate our native crashes
         ndk.debugSymbolLevel = 'FULL'
@@ -102,7 +102,14 @@ android {
             enableSplit = false
         }
     }
-
+    signingConfigs {
+        release {
+            storeFile file("D:\\Code\\android\\moonlight-transparent\\my-release-key.jks") // keystore 文件路径
+            storePassword "111111" // keystore 密码
+            keyAlias "my-key-alias" // alias
+            keyPassword "111111" // key 密码
+        }
+    }
     buildTypes {
         debug {
             applicationIdSuffix ".noirdebug"
