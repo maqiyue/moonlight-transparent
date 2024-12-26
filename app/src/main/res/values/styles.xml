@@ -58,7 +58,7 @@
 <!--        <item name="android:backgroundDimAmount">0.6</item>-->
 
         <!-- 对话框背景半透明 -->
-        <item name="android:background">#20000000</item>
+        <item name="android:background">#40000000</item>
 
         <!-- 按钮样式 -->
         <item name="android:textColor">#FFFFFF</item>
@@ -80,6 +80,20 @@
     <style name="DialogTitleText">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="PopupMenuStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowMinWidthMajor">0dp</item>
+        <item name="android:windowMinWidthMinor">0dp</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:listPreferredItemHeightSmall">48dp</item>
+        <item name="android:listPreferredItemPaddingLeft">16dp</item>
+        <item name="android:listPreferredItemPaddingRight">16dp</item>
+    </style>
+
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>
