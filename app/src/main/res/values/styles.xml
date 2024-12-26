@@ -48,4 +48,32 @@
         <attr name="aperture_middle_color" format="color" />
     </declare-styleable>
 
+    <!-- 自定义 AlertDialog 样式 -->
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Material.Dialog.Alert">
+        <!-- 对话框背景半透明 -->
+        <item name="android:windowBackground">#00000000</item>
+<!--        <item name="android:backgroundDimAmount">0.6</item>-->
+
+        <!-- 内容区域完全透明 -->
+        <item name="android:background">#40000000</item>
+
+        <!-- 按钮样式 -->
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+
+        <!-- 标题和消息文本颜色 -->
+        <item name="android:windowTitleStyle">@style/DialogTitleText</item>
+        <item name="android:textColorAlertDialogListItem">#FFFFFF</item>
+        <item name="android:textViewStyle">@style/TransparentTextView</item>
+    </style>
+
+    <style name="TransparentTextView">
+        <item name="android:background">@android:color/transparent</item>  <!-- 设置背景透明 -->
+    </style>
+
+    <style name="DialogTitleText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>
