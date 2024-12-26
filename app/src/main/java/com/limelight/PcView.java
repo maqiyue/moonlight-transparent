@@ -49,6 +49,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -370,7 +371,10 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
 
         // Call superclass
         super.onCreateContextMenu(menu, v, menuInfo);
-                
+
+        // 遮罩效果
+        backgroundBrightness(0.5f);
+
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
         ComputerObject computer = (ComputerObject) pcGridAdapter.getItem(info.position);
 
@@ -434,6 +438,7 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
         // startComputerUpdates() manages this and won't actual start polling until the activity
         // returns to the foreground.
         startComputerUpdates();
+        backgroundBrightness(1.0f);
     }
 
     private void doPair(final ComputerDetails computer, String otp, String passphrase) {
@@ -700,6 +705,10 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
+        // 取消遮罩
+        backgroundBrightness(1.0f);
+
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         final ComputerObject computer = (ComputerObject) pcGridAdapter.getItem(info.position);
         switch (item.getItemId()) {
@@ -878,6 +887,12 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
         });
         UiHelper.applyStatusBarPadding(listView);
         registerForContextMenu(listView);
+    }
+
+    private void backgroundBrightness(float alpha) {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = alpha;
+        getWindow().setAttributes(params);
     }
 
     public static class ComputerObject {

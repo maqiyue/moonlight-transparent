@@ -39,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -166,6 +167,8 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
         super.onConfigurationChanged(newConfig);
 
         this.prefConfig = PreferenceConfiguration.readPreferences(this);
+        setContentView(R.layout.activity_app_view);
+        UiHelper.notifyNewRootView(this);
 
         // If appGridAdapter is initialized, let it know about the configuration change.
         // If not, it will pick it up when it initializes.
@@ -400,6 +403,9 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
+        // 遮罩效果
+        backgroundBrightness(0.5f);
+
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
         AppObject selectedApp = (AppObject) appGridAdapter.getItem(info.position);
 
@@ -453,10 +459,14 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
 
     @Override
     public void onContextMenuClosed(Menu menu) {
+        backgroundBrightness(1.0f);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
+        backgroundBrightness(1f);
+
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         final AppObject app = (AppObject) appGridAdapter.getItem(info.position);
         int itemId = item.getItemId();
@@ -687,7 +697,9 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
                 AppObject app = (AppObject) appGridAdapter.getItem(pos);
 
                 // Only open the context menu if something is running, otherwise start it
-                if (lastRunningAppId != 0) {
+                if (lastRunningAppId != 0 && lastRunningAppId == app.app.getAppId()) {//简化恢复串流交互
+                    ServerHelper.doStart(AppView.this, app.app, computer, managerBinder, false);
+                } else if (lastRunningAppId != 0) {
                     openContextMenu(arg1);
                 } else {
                     if (prefConfig.useVirtualDisplay && !(computer.vDisplaySupported && computer.vDisplayDriverReady)) {
@@ -706,6 +718,12 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
         UiHelper.applyStatusBarPadding(listView);
         registerForContextMenu(listView);
         listView.requestFocus();
+    }
+
+    private void backgroundBrightness(float alpha) {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.alpha = alpha;
+        getWindow().setAttributes(params);
     }
 
     public static class AppObject {
