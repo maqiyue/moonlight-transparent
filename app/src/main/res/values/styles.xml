@@ -52,12 +52,13 @@
 
     <!-- 自定义 AlertDialog 样式 -->
     <style name="AlertDialogCustom" parent="@android:style/Theme.Material.Dialog.Alert">
-        <!-- 对话框背景半透明 -->
-        <item name="android:windowBackground">#00000000</item>
+        <!-- 设置自定义的圆角背景 -->
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+
 <!--        <item name="android:backgroundDimAmount">0.6</item>-->
 
-        <!-- 内容区域完全透明 -->
-        <item name="android:background">#40000000</item>
+        <!-- 对话框背景半透明 -->
+        <item name="android:background">#20000000</item>
 
         <!-- 按钮样式 -->
         <item name="android:textColor">#FFFFFF</item>
@@ -67,6 +68,9 @@
         <item name="android:windowTitleStyle">@style/DialogTitleText</item>
         <item name="android:textColorAlertDialogListItem">#FFFFFF</item>
         <item name="android:textViewStyle">@style/TransparentTextView</item>
+        <!-- 使对话框宽度适应内容 -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="TransparentTextView">

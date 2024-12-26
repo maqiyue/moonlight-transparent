@@ -393,7 +393,6 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
     }
 
     private void showAppContextDialog(final AppObject app, final View targetView) {
-        backgroundBrightness(0.5f);
 
         // 根据运行的逻辑组装菜单选项
         final ArrayList<String> menuItems = new ArrayList<>();
@@ -445,8 +444,7 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
         // 使用 AlertDialog 显示菜单
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(menuItems.toArray(new String[0]), (dialog, which) -> {
-            // 还原背景
-            backgroundBrightness(1.0f);
+
 
             String selectedItem = menuItems.get(which);
             if (selectedItem.equals(getResources().getString(R.string.applist_menu_quit_and_start)) ||
@@ -511,16 +509,10 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
             }
         });
 
-        // 当对话框关闭时恢复亮度
-        builder.setOnDismissListener(dialog -> backgroundBrightness(1.0f));
         builder.show();
     }
 
-    private void backgroundBrightness(float alpha) {
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.alpha = alpha;
-        getWindow().setAttributes(params);
-    }
+
 
     public static class AppObject {
         public final NvApp app;
