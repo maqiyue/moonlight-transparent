@@ -17,6 +17,7 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -118,7 +119,7 @@ public class UiHelper {
 
     public static void notifyNewRootView(final Activity activity)
     {
-        View rootView = activity.findViewById(android.R.id.content);
+        ViewGroup rootView = activity.findViewById(android.R.id.content);
         UiModeManager modeMgr = (UiModeManager) activity.getSystemService(Context.UI_MODE_SERVICE);
 
         // Set GameState.MODE_NONE initially for all activities
@@ -152,11 +153,16 @@ public class UiHelper {
                 public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
                     // Use the tappable insets so we can draw under the status bar in gesture mode
                     Insets tappableInsets = windowInsets.getTappableElementInsets();
-                    view.setPadding(tappableInsets.left,
-                            tappableInsets.top,
-                            tappableInsets.right,
-                            0);
 
+                    int childCount = rootView.getChildCount();
+                    //TODO:这里没查到方案 先用这个笨办法解决
+                    for (int i = 0; i < childCount; i++) {
+                        View child = rootView.getChildAt(i);
+                        child.setPadding(tappableInsets.left,
+                                tappableInsets.top,
+                                tappableInsets.right,
+                                0);
+                    }
                     // Show a translucent navigation bar if we can't tap there
                     if (tappableInsets.bottom != 0) {
                         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
