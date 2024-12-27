@@ -141,7 +141,7 @@ public class ShortcutTrampoline extends Activity {
                                                     // below before we return.
                                                     final Intent startIntent = ServerHelper.createStartIntent(ShortcutTrampoline.this, app, details, managerBinder, false);
 
-                                                    UiHelper.displayQuitConfirmationDialog(ShortcutTrampoline.this, new Runnable() {
+                                                    new Runnable() {
                                                         @Override
                                                         public void run() {
                                                             intentStack.add(startIntent);
@@ -152,13 +152,7 @@ public class ShortcutTrampoline extends Activity {
                                                             // Now start the activities
                                                             startActivities(intentStack.toArray(new Intent[]{}));
                                                         }
-                                                    }, new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            // Close this activity
-                                                            finish();
-                                                        }
-                                                    });
+                                                    };
                                                 }
                                             } else {
                                                 // Close this activity

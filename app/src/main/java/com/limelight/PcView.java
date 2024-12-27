@@ -807,10 +807,8 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
                     Toast.makeText(PcView.this, getString(R.string.error_manager_not_running), Toast.LENGTH_LONG).show();
                     return;
                 }
-                UiHelper.displayQuitConfirmationDialog(PcView.this, () -> {
-                    ServerHelper.doQuit(PcView.this, computer.details,
+                ServerHelper.doQuit(PcView.this, computer.details,
                         new NvApp("app", 0, false), managerBinder, null);
-                }, null);
             }
             else if (selectedItem.equals(getString(R.string.pcview_menu_app_list))) {
                 doAppList(computer.details, false, true);

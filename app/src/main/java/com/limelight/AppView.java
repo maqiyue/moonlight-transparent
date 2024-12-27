@@ -454,13 +454,11 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
                     UiHelper.displayVdisplayConfirmationDialog(
                         AppView.this,
                         computer,
-                        () -> UiHelper.displayQuitConfirmationDialog(this, () ->
-                                ServerHelper.doStart(AppView.this, app.app, computer, managerBinder, true), null),
+                        () -> ServerHelper.doStart(AppView.this, app.app, computer, managerBinder, true),
                         null
                     );
                 } else {
-                    UiHelper.displayQuitConfirmationDialog(this, () ->
-                        ServerHelper.doStart(AppView.this, app.app, computer, managerBinder, withVDiaplay), null);
+                    ServerHelper.doStart(AppView.this, app.app, computer, managerBinder, withVDiaplay);
                 }
             }
             else if (selectedItem.equals(getResources().getString(R.string.applist_menu_start_primarydisplay)) ||
@@ -479,15 +477,13 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
                 }
             }
             else if (selectedItem.equals(getResources().getString(R.string.applist_menu_quit))) {
-                UiHelper.displayQuitConfirmationDialog(this, () -> {
-                    suspendGridUpdates = true;
-                    ServerHelper.doQuit(AppView.this, computer, app.app, managerBinder, () -> {
-                        suspendGridUpdates = false;
-                        if (poller != null) {
-                            poller.pollNow();
-                        }
-                    });
-                }, null);
+                suspendGridUpdates = true;
+                ServerHelper.doQuit(AppView.this, computer, app.app, managerBinder, () -> {
+                    suspendGridUpdates = false;
+                    if (poller != null) {
+                        poller.pollNow();
+                    }
+                });
             }
             else if (selectedItem.equals(getResources().getString(R.string.applist_menu_details))) {
                 Dialog.displayDialog(AppView.this, getResources().getString(R.string.title_details), app.app.toString(), false);
