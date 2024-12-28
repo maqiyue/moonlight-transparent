@@ -30,10 +30,10 @@
 
             <ImageView
                 android:id="@+id/grid_overlay"
-                android:layout_width="33dp"
-                android:layout_height="33dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="33dp"
-                android:alpha="1"
+                android:alpha="0.9"
                 android:layout_centerHorizontal="true" />
 
             <TextView

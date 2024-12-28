@@ -161,7 +161,7 @@
             android:enableOnBackInvokedCallback="false"
             android:launchMode="singleTask"
             android:excludeFromRecents="true"
-            android:theme="@style/StreamTheme"
+            android:theme="@style/AppTheme"
             android:preferMinimalPostProcessing="true">
 
             <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />

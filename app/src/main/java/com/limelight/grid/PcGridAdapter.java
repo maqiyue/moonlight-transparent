@@ -87,6 +87,13 @@ public class PcGridAdapter extends GenericGridAdapter<PcView.ComputerObject> {
             overlayView.setAlpha(1.0f);
             overlayView.setVisibility(View.VISIBLE);
         }
+        // 添加运行状态的判断
+        else if (obj.details.state == ComputerDetails.State.ONLINE && 
+                obj.details.runningGameId != 0) {  // runningGameId 不为0表示有游戏在运行
+            overlayView.setImageResource(R.drawable.ic_play);
+            overlayView.setAlpha(1.0f);
+            overlayView.setVisibility(View.VISIBLE);
+        }
         else {
             overlayView.setVisibility(View.GONE);
         }

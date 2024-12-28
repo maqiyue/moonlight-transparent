@@ -162,6 +162,9 @@ public class AppView extends Activity implements AdapterFragmentCallbacks {
         setContentView(R.layout.activity_app_view);
         UiHelper.notifyNewRootView(this);
 
+        TextView label = findViewById(R.id.appListText);
+        label.setText(getTitle());
+
         // If appGridAdapter is initialized, let it know about the configuration change.
         // If not, it will pick it up when it initializes.
         if (appGridAdapter != null) {
