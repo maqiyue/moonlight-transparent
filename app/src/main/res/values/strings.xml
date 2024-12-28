@@ -165,8 +165,10 @@
     <string name="text_native_res_dialog">Native resolution and/or FPS may not be supported by the streaming server. You will probably need to configure a matching custom display mode for the host PC manually.\n\nIf you choose to create a custom resolution in NVIDIA Control Panel to match your screen settings, please ensure you have read and understood NVIDIA\'s warning regarding possible monitor damage, PC instability, and other potential problems.\n\nWe are not responsible for any problems resulting from creating a custom resolution on your PC.\n\nIt may be that your monitor does not support a necessary display configuration. If so, you may try to set up a virtual monitor. Finally, if your device or host PC does not support streaming at a specific resolution or refresh rate, you\'re out of luck unfortunately.</string>
     <string name="title_fps_list">Video frame rate</string>
     <string name="summary_fps_list">Increase for a smoother video stream. Decrease for better performance on lower end devices.</string>
-    <string name="title_seekbar_bitrate">Video bitrate</string>
+    <string name="title_seekbar_bitrate">Video bitrate (WiFi)</string>
     <string name="summary_seekbar_bitrate">Increase for better image quality. Decrease to improve performance on slower connections.</string>
+    <string name="title_seekbar_bitrate_mobile">Video bitrate (Mobile)</string>
+    <string name="summary_seekbar_bitrate_mobile">Video bitrate used when connected to mobile network</string>
     <string name="suffix_seekbar_bitrate_mbps">Mbps</string>
     <string name="title_resolution_scale_factor">Resolution Scale Factor</string>
     <string name="summary_resolution_scale_factor">Server side requested virtual screen resolution will be multiplied by this factor. Streaming resolution are not affected.\ne.g. 120% will make 2000x1000 become 2400x1200.\nSetting a higher scale factor will improve image quality for some games.\nRequires Apollo to take effect.</string>
@@ -381,7 +383,7 @@
     <string name="title_export_keyboard_layout">Export keyboard layout</string>
     <string name="summary_import_keyboard_layout">This will overwrite the current layout.</string>
     <string name="summary_export_keyboard_layout">Export the current keyboard layout</string>
-    <string name="title_manual_enter_bitrate">Enter bitrate manually</string>
+    <string name="title_manual_enter_bitrate">Enter bitrate manually (WIFI)</string>
     <string name="summary_manual_enter_bitrate">Enter bitrate manually.\nCan exceed the maximum range of the seekbar.</string>
     <string name="dialog_manual_enter_bitrate">Enter bitrate in Mbps. Round to 0.5.</string>
     <string name="title_touchscreen_mode">Touchscreen Mode</string>

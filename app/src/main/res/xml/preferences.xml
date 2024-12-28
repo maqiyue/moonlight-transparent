@@ -38,6 +38,19 @@
             seekbar:min="500"
             seekbar:step="500" />
 
+        <com.limelight.preferences.SeekBarPreference
+            android:dialogMessage="@string/summary_seekbar_bitrate_mobile"
+            android:key="seekbar_bitrate_mobile_kbps"
+            android:max="300000"
+            android:summary="@string/summary_seekbar_bitrate_mobile"
+            android:text="@string/suffix_seekbar_bitrate_mbps"
+            android:title="@string/title_seekbar_bitrate_mobile"
+            app:iconSpaceReserved="false"
+            seekbar:divisor="1000"
+            seekbar:keyStep="1000"
+            seekbar:min="500"
+            seekbar:step="500" />
+
         <EditTextPreference
             android:defaultValue="20"
             android:dialogMessage="@string/dialog_manual_enter_bitrate"

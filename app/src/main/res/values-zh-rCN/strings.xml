@@ -123,8 +123,10 @@
     <string name="summary_resolution_list">高分辨率提升图像清晰度。低分辨率提升在低端设备和较慢网络中的串流体验。</string>
     <string name="title_fps_list"> 视频帧数 </string>
     <string name="summary_fps_list">高帧数提升视频流流畅度。低帧数提升在低端设备中的串流体验。</string>
-    <string name="title_seekbar_bitrate"> 视频码率 </string>
+    <string name="title_seekbar_bitrate">视频码率 (WiFi)</string>
     <string name="summary_seekbar_bitrate">高码率提升图像质量。低码率提升在较慢网络中的串流体验。</string>
+    <string name="title_seekbar_bitrate_mobile">视频码率 (移动网络)</string>
+    <string name="summary_seekbar_bitrate_mobile">移动网络下使用的视频码率</string>
     <string name="title_resolution_scale_factor">分辨率缩放比例</string>
     <string name="summary_resolution_scale_factor">服务端虚拟屏分辨率将会乘以此比例。串流视频分辨率不受影响。\n例如: 120% 将会使 2000x1000 变成 2400x1200。\n更高的缩放比例在某些游戏中可以改善画质。\n需要 Apollo 才能生效。</string>
     <string name="title_unlock_fps"> 解锁所有可用帧数 </string>
@@ -192,7 +194,7 @@
     <string name="summary_enable_perf_overlay"> 在串流中显示实时性能信息 </string>
     <string name="title_enable_post_stream_toast">串流完毕显示延迟信息</string>
     <string name="summary_enable_post_stream_toast">串流结束后显示延迟信息</string>
-    <string name="title_osc_opacity">更改屏幕按钮透明度</string>
+    <string name="title_osc_opacity">���改屏幕按钮透明度</string>
     <string name="dialog_title_osc_opacity">透明度</string>
     <string name="suffix_osc_opacity">%</string>
     <string name="summary_osc_opacity">令屏幕按钮变得更透明/更不透明</string>
@@ -227,7 +229,7 @@
     <string name="check_ports_msg">请检查您的防火墙和端口转发规则中的端口：</string>
     <string name="early_termination_error">开始串流时您的主机电脑出了点问题。
 \n
-\n请确保没有在主机电脑上开启任何受DRM保护的内容。您也可以尝试重新启动主机电脑。</string>
+\n请确保没有在主机电脑上开启任何受DRM���护的内容。您也可以尝试重新启动主机电脑。</string>
     <string name="no_frame_received_error">您的网络连接质量不佳。请降低视频码率设置或更换更快的网络连接。</string>
     <string name="no_video_received_error">没有接收到来自主机的视频。</string>
     <string name="video_decoder_init_failed">视频解码器初始化失败。您的设备可能不支持选定的分辨率或帧数。</string>
@@ -347,7 +349,7 @@
     <string name="title_export_keyboard_layout">导出键盘布局</string>
     <string name="summary_import_keyboard_layout">导入键盘布局配置。会覆盖当前配置。</string>
     <string name="summary_export_keyboard_layout">导出当前设置的键盘布局</string>
-    <string name="title_manual_enter_bitrate">手动输入码率</string>
+    <string name="title_manual_enter_bitrate">手动输入码率(WIFI)</string>
     <string name="summary_manual_enter_bitrate">手动输入码率，可以超过滑动条选项的极限。</string>
     <string name="dialog_manual_enter_bitrate">以 Mbps 输入码率。以0.5为限四舍五入。</string>
     <string name="title_touchscreen_mode">触摸屏鼠标模拟方式</string>
@@ -368,7 +370,7 @@
     <string name="summary_custom_resolution">添加一个自定义分辨率,x号分割,比较奇怪的分辨率可能无法生效。
             \n例如：1920x1080
             \n非原生分辨率如果是刘海屏可能不会默认填充刘海区域，
-            \n如果画面比例一样，可手动设置拉伸画面来充满全屏</string>
+            \n如果画面比例一样，���手动设置拉伸画面来充满全屏</string>
     <string name="title_custom_resolution">自定义分辨率</string>
     <string name="title_auto_orientation">自动屏幕方向</string>
     <string name="summary_auto_orientation">串流画面将以启动时的设备旋转方向呈现。</string>
@@ -393,7 +395,7 @@
     <string name="summary_auto_touch_sensitivity">正常灵敏度太高，滑动很小的距离就会超出边界，导致划不动，可勾选此选项。</string>
     <string name="title_touch_sensitivity_x">屏幕灵敏度调整X轴</string>
     <string name="summary_touch_sensitivity_x">多点触控模式，玩游戏时，可能某些游戏灵敏度调节不能满足需求，可使用此选项修改视野的灵敏度。</string>
-    <string name="title_touch_sensitivity_y">屏幕灵敏度调整Y轴</string>
+    <string name="title_touch_sensitivity_y">屏幕灵敏���调整Y轴</string>
     <string name="summary_touch_sensitivity_y">多点触控模式，玩游戏时，可能某些游戏灵敏度调节不能满足需求，可使用此选项修改视野的灵敏度。</string>
     <string name="title_debug_info">调试信息</string>
     <string name="summary_debug_info">测试手柄震动及其他内容。</string>
@@ -428,7 +430,7 @@
     <string name="title_trackpad_swap_axis">交换触摸板XY坐标</string>
     <string name="summary_trackpad_swap_axis">在某些设备上，触摸板输入坐标可能会与当前视图方向不符。开启此选项可能会有用。</string>
     <string name="title_checkbox_force_qwerty">强制使用 QWERTY 布局</string>
-    <string name="summary_checkbox_force_qwerty">强制使用 QWERTY 键盘布局。GFE必须使用。\n如果你希望使用其他键盘布局的话，请关闭此选项。</string>
+    <string name="summary_checkbox_force_qwerty">强制使用 QWERTY 键盘布局。GFE必须使用。\n如��你希望使用其他键盘布局的话，请关闭此选项。</string>
     <string name="title_checkbox_back_as_meta">使用返回键作为 Meta</string>
     <string name="summary_back_as_meta">在按下物理返回键时发送 Meta(Win) 键</string>
     <string name="title_smart_clipboard_sync">智能剪贴板同步（实验性）</string>
@@ -451,7 +453,7 @@
     <string name="title_checkbox_enforce_display_mode">强制设置显示模式</string>
     <string name="summary_checkbox_enforce_display_mode">强制使用最佳显示模式。\n在某些系统(如ColorOS等)上必须启用才能正确设置刷新率/分辨率。\n请勿在ChromeCast 4K上启用此选项，可能会导致bug。</string>
     <string name="title_checkbox_use_virtual_display">使用虚拟显示器</string>
-    <string name="summary_checkbox_use_virtual_display">默认使用虚拟显示器。\n虚拟显示器可以自动匹配设备端的分辨率与刷新率设置，提供无缝的串流体验。\n需要使用 Apollo 作为服务端串流软件。</string>
+    <string name="summary_checkbox_use_virtual_display">默认使用虚拟显示器。\n虚拟显示器可以自动匹配设备端的分辨率与刷新率设置，提供无缝的串流体验。\n���要使用 Apollo 作为服务端串流软件。</string>
     <string name="virtual_keyboard_hide">隐藏\n键盘</string>
     <string name="mouse_mode_multi_touch">多点触控</string>
     <string name="mouse_mode_absolute_touch">单点触控</string>
@@ -504,12 +506,12 @@
     <string name="game_menu_advanced">高级菜单</string>
     <string name="game_dialog_title_quit_confirm">确定要退出吗？</string>
     <string name="game_dialog_message_quit_confirm">请确保当前没有未保存的进度。终止会话会导致当前运行的程序被强行停止。</string>
-    <string name="game_menu_quit_session">终止会话</string>
+    <string name="game_menu_quit_session">��止会话</string>
     <string name="game_menu_server_cmd">服务端命令</string>
     <string name="game_menu_fetch_clipboard">获取剪贴板</string>
     <string name="game_menu_upload_clipboard">上传剪贴板</string>
     <string name="game_dialog_title_server_cmd_empty">无服务端命令</string>
-    <string name="game_dialog_message_server_cmd_empty">请确保你的服务端为 Apollo，并已授予此客户端“服务端命令”权限。</string>
+    <string name="game_dialog_message_server_cmd_empty">请确保你的服务端为 Apollo，并已授予此客户端"服务端命令"权限。</string>
     <string name="vdisplay_not_ready">服务端虚拟显示器驱动未就绪。请确保 SudoVDA 驱动已正确安装并启用。</string>
     <string name="vdisplay_not_supported"><![CDATA[此服务端不支持虚拟显示器。请使用 <a href=\"https://github.com/ClassicOldSong/Apollo\">Apollo</a> 作为服务端串流软件。]]></string>
     <string name="clipboard_sync_unsupported">此服务器不支持剪贴板同步，请安装或升级服务端至最新的 Apollo。</string>
@@ -523,7 +525,7 @@
     <string name="configuration_mode_move_buttons">配置模式：调整控件位置</string>
     <string name="configuration_mode_resize_buttons">配置模式：调整控件大小</string>
     <string name="configuration_mode_exiting">退出配置模式</string>
-    <string name="unlocking_or_starting">服务端正在启动或电脑正在解锁，请稍候…</string>
+    <string name="unlocking_or_starting">服务端��在启动或电脑正在解锁，请稍候…</string>
     <string name="error_msg_permission_denied">权限不足</string>
     <string name="error_msg_timeout">连接超时</string>
     <string name="permission_launch_app">启动APP</string>
