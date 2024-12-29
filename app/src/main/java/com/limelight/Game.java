@@ -1,6 +1,7 @@
 package com.limelight;
 
 
+
 import com.limelight.binding.PlatformBinding;
 import com.limelight.binding.audio.AndroidAudioRenderer;
 import com.limelight.binding.input.ControllerHandler;
@@ -40,6 +41,8 @@ import com.limelight.utils.ServerHelper;
 import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.SpinnerDialog;
 import com.limelight.utils.UiHelper;
+import com.moonlight.next.game.menu.GameMenuPanel;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -91,6 +94,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
 import java.io.ByteArrayInputStream;
@@ -105,7 +109,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class Game extends Activity implements SurfaceHolder.Callback,
+public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         OnGenericMotionListener, OnTouchListener, NvConnectionListener, EvdevListener,
         OnSystemUiVisibilityChangeListener, GameGestures, StreamView.InputCallbacks,
         PerfOverlayListener, UsbDriverService.UsbDriverStateListener, View.OnKeyListener{
@@ -3354,14 +3358,20 @@ public class Game extends Activity implements SurfaceHolder.Callback,
         prefConfig.enablePerfOverlay = !prefConfig.enablePerfOverlay;
         if(prefConfig.enablePerfOverlay){
             performanceOverlayView.setVisibility(View.VISIBLE);
-            if(prefConfig.enablePerfOverlayLite){
-                performanceOverlayLite.setVisibility(View.VISIBLE);
-            }else{
-                performanceOverlayBig.setVisibility(View.VISIBLE);
-            }
+            //显示精简版
+            performanceOverlayLite.setVisibility(View.VISIBLE);
+//            if(prefConfig.enablePerfOverlayLite){
+//                performanceOverlayLite.setVisibility(View.VISIBLE);
+//            }else{
+//                performanceOverlayBig.setVisibility(View.VISIBLE);
+//            }
             return;
         }
         performanceOverlayView.setVisibility(View.GONE);
+    }
+
+    public boolean isPerfOverlayEnabled() {
+        return prefConfig.enablePerfOverlay;
     }
 
     //切换触控灵敏度开关
@@ -3393,7 +3403,8 @@ public class Game extends Activity implements SurfaceHolder.Callback,
     @Override
     public void showGameMenu(GameInputDevice device) {
         if (gameMenuCallbacks != null) {
-            gameMenuCallbacks.showMenu(device);
+            // 使用 next 包中的新菜单替代原有菜单
+            new GameMenuPanel(this, conn, device);
         }
     }
 
