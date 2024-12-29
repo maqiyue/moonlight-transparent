@@ -121,7 +121,7 @@
             seekbar:step="1" />
 
         <ListPreference
-            android:defaultValue="fit"
+            android:defaultValue="Stretch"
             android:entries="@array/video_scale_mode_names"
             android:entryValues="@array/video_scale_mode_values"
             android:key="list_video_scale_mode"
@@ -428,7 +428,7 @@
         android:title="@string/category_ui_settings"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="checkbox_enable_pip"
             android:summary="@string/summary_checkbox_enable_pip"
             android:title="@string/title_checkbox_enable_pip"
@@ -489,7 +489,7 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:dependency="checkbox_enable_perf_overlay"
             android:key="checkbox_enable_perf_overlay_lite"
             android:summary="@string/summary_checkbox_enable_perf_overlay_lite"
