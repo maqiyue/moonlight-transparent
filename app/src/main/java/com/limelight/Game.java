@@ -22,6 +22,7 @@ import com.limelight.binding.video.CrashListener;
 import com.limelight.binding.video.MediaCodecDecoderRenderer;
 import com.limelight.binding.video.MediaCodecHelper;
 import com.limelight.binding.video.PerfOverlayListener;
+
 import com.limelight.nvstream.NvConnection;
 import com.limelight.nvstream.NvConnectionListener;
 import com.limelight.nvstream.StreamConfiguration;
@@ -42,6 +43,7 @@ import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.SpinnerDialog;
 import com.limelight.utils.UiHelper;
 import com.moonlight.next.game.menu.GameMenuPanel;
+import com.limelight.next.game.view.FloatingKeyboardButton;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -670,6 +672,18 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         }
 
         gameMenuCallbacks = new GameMenu(this, conn);
+
+        // 添加悬浮按钮
+        FloatingKeyboardButton floatingButton = new FloatingKeyboardButton(this,conn);
+        floatingButton.setGame(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            100, // 固定宽度
+            100  // 固定高度
+        );
+        params.gravity = Gravity.TOP | Gravity.START;
+        params.topMargin = 100;
+        params.leftMargin = 100;
+        ((FrameLayout)findViewById(android.R.id.content)).addView(floatingButton, params);
     }
 
     private void initKeyboardController(){
@@ -3358,13 +3372,11 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         prefConfig.enablePerfOverlay = !prefConfig.enablePerfOverlay;
         if(prefConfig.enablePerfOverlay){
             performanceOverlayView.setVisibility(View.VISIBLE);
-            //显示精简版
-            performanceOverlayLite.setVisibility(View.VISIBLE);
-//            if(prefConfig.enablePerfOverlayLite){
-//                performanceOverlayLite.setVisibility(View.VISIBLE);
-//            }else{
-//                performanceOverlayBig.setVisibility(View.VISIBLE);
-//            }
+            if(prefConfig.enablePerfOverlayLite){
+                performanceOverlayLite.setVisibility(View.VISIBLE);
+            }else{
+                performanceOverlayBig.setVisibility(View.VISIBLE);
+            }
             return;
         }
         performanceOverlayView.setVisibility(View.GONE);
