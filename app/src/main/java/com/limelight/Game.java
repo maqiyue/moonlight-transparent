@@ -91,6 +91,7 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -98,6 +99,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
+
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -249,6 +251,8 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
     }
 
     public GameMenuCallbacks gameMenuCallbacks;
+
+    private FloatingKeyboardButton floatingButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -673,17 +677,10 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
 
         gameMenuCallbacks = new GameMenu(this, conn);
 
-        // 添加悬浮按钮
-        FloatingKeyboardButton floatingButton = new FloatingKeyboardButton(this,conn);
-        floatingButton.setGame(this);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-            100, // 固定宽度
-            100  // 固定高度
-        );
-        params.gravity = Gravity.TOP | Gravity.START;
-        params.topMargin = 100;
-        params.leftMargin = 100;
-        ((FrameLayout)findViewById(android.R.id.content)).addView(floatingButton, params);
+
+        if (getPreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD)) {
+            addFloatingKeyboardButton();
+        }
     }
 
     private void initKeyboardController(){
@@ -2504,6 +2501,19 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
                         return true;
                     }
 
+                    if (
+                            (event.getActionMasked() == MotionEvent.ACTION_POINTER_UP
+                                    || event.getActionMasked() == MotionEvent.ACTION_UP)
+                                    && event.getPointerCount() == 1
+                                    && (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || (event.getFlags() & MotionEvent.FLAG_CANCELED) == 0)
+                                    && prefConfig.enableThreeFingerKeyboard
+                                    && event.getEventTime() - threeFingerDownTime < THREE_FINGER_TAP_THRESHOLD
+                    ) {
+                        toggleKeyboard();   // 三点弹出软键盘
+                        return true;
+                    }
+
+
                     // TODO: Re-enable native touch when have a better solution for handling
                     // cancelled touches from Android gestures and 3 finger taps to activate
                     // the software keyboard.
@@ -2563,18 +2573,6 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
                 break;
             case MotionEvent.ACTION_POINTER_UP:
             case MotionEvent.ACTION_UP:
-                //是触控板模式 三点呼出软键盘
-                if(prefConfig.touchscreenTrackpad){
-                    if (pointerCount == 1 &&
-                            (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || (event.getFlags() & MotionEvent.FLAG_CANCELED) == 0)) {
-                        // All fingers up
-                        if (event.getEventTime() - threeFingerDownTime < THREE_FINGER_TAP_THRESHOLD) {
-                            // This is a 3 finger tap to bring up the keyboard
-                            toggleKeyboard();
-                            return true;
-                        }
-                    }
-                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && (event.getFlags() & MotionEvent.FLAG_CANCELED) != 0) {
                     context.cancelTouch();
                 }
@@ -3301,16 +3299,41 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
 
     public void selectMouseMode(){
         String[] strings = getResources().getStringArray(R.array.mouse_mode_names);
-        String[] items = Arrays.copyOf(strings,strings.length + 1);
+        String[] items = Arrays.copyOf(strings, strings.length + 1);
         items[items.length - 1] = getString(R.string.toggle_local_mouse_cursor);
-        new AlertDialog.Builder(this).setItems(items, (dialog, which) -> {
+        int currentMode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("mouse_mode_list", "0"));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                
+                // 当前选中的鼠标模式显示为 50% 透明度的翠绿色
+                if (position == currentMode && position != items.length - 1) {
+                    textView.setBackgroundColor(0x6000FF00);  // 50% 透明度的翠绿色 (#80 = 50% 透明度)} else {
+
+                }else {
+                    textView.setBackgroundColor(0x00000000);
+            }
+
+
+                return textView;
+            }
+        };
+
+        builder.setAdapter(adapter, (dialog, which) -> {
             dialog.dismiss();
             if(which == strings.length){
                 toggleMouseLocalCursor();
                 return;
             }
             applyMouseMode(which);
-        }).setTitle(getString(R.string.game_menu_select_mouse_mode)).create().show();
+            saveStringPreference("mouse_mode_list", String.valueOf(which));
+        }).setTitle(getString(R.string.game_menu_select_mouse_mode))
+          .create()
+          .show();
     }
 
     //本地鼠标光标切换
@@ -3468,5 +3491,89 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
             }
         });
         streamView.setClipToOutline(true);
+    }
+
+    // 保存配置的方法
+    public void savePreference(String key, boolean value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean(key, value).apply();
+    }
+
+    // 保存字符串类型配置
+    public void saveStringPreference(String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString(key, value).apply();
+    }
+
+    // 获取悬浮小键盘显示状态
+    public boolean isFloatingKeyboardShowing() {
+        return prefConfig.enableFloatingKeyboard;  // 直接使用配置变量
+    }
+
+    // 切换悬浮小键盘并保存状态
+    public void toggleFloatingKeyboard() {
+        boolean newState = !prefConfig.enableFloatingKeyboard;
+        prefConfig.enableFloatingKeyboard = newState;  // 更新变量
+        savePreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD, newState);  // 永久存储
+        
+        if (newState) {
+            if (floatingButton == null) {
+                addFloatingKeyboardButton();
+            } else {
+                floatingButton.setVisibility(View.VISIBLE);
+            }
+        } else if (floatingButton != null) {
+            floatingButton.setVisibility(View.GONE);
+        }
+    }
+
+    // 通用的配置获取方法
+    public boolean getPreference(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean(key, false);
+    }
+
+    // 添加新方法用于创建和添加按钮
+    private void addFloatingKeyboardButton() {
+        if (floatingButton != null) {
+            return;  // 避免重复添加
+        }
+        floatingButton = new FloatingKeyboardButton(this, conn);
+        floatingButton.setGame(this);
+        
+        // 从 SharedPreferences 加载上次保存的位置
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int savedX = prefs.getInt("floating_keyboard_x", 100);  // 默认值 100
+        int savedY = prefs.getInt("floating_keyboard_y", 100);  // 默认值 100
+        
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            100, // 固定宽度
+            100  // 固定高度
+        );
+        params.gravity = Gravity.TOP | Gravity.START;
+        params.topMargin = savedY;
+        params.leftMargin = savedX;
+        ((FrameLayout)findViewById(android.R.id.content)).addView(floatingButton, params);
+    }
+
+    // 添加保存位置的方法
+    public void saveFloatingKeyboardPosition(int x, int y) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putInt("floating_keyboard_x", x);
+        editor.putInt("floating_keyboard_y", y);
+        editor.apply();
+    }
+
+    // 获取三指键盘状态
+    public boolean isThreeFingerKeyboardEnabled() {
+        return prefConfig.enableThreeFingerKeyboard;
+    }
+
+    // 切换三指键盘状态
+    public void toggleThreeFingerKeyboard() {
+        boolean newState = !prefConfig.enableThreeFingerKeyboard;
+        prefConfig.enableThreeFingerKeyboard = newState;  // 更新变量
+        savePreference(PreferenceConfiguration.ENABLE_THREE_FINGER_KEYBOARD, newState);  // 永久存储
+        // TODO: 这里可以添加其他三指键盘切换时需要的逻辑
     }
 }

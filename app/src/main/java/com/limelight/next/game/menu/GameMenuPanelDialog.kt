@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -33,7 +34,7 @@ fun showMenuPanelDialog(
         GameMenuPanel(
             title,
             options,
-            if (game.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 4 else 8,
+            if (game.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 4 else 7,
             runner
         )
     }.show(game.supportFragmentManager, "")
@@ -58,7 +59,9 @@ private fun GameMenuPanel(
 ) {
     val dialogController = LocalComposeDialogController.current
     val padding = 4.dp
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Text(
             modifier = Modifier.padding(vertical = 16.dp, horizontal = padding),
             text = title,
@@ -68,7 +71,8 @@ private fun GameMenuPanel(
             columns = GridCells.Fixed(spanCount),
             contentPadding = PaddingValues(padding),
             verticalArrangement = Arrangement.spacedBy(padding),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            horizontalArrangement = Arrangement.spacedBy(padding),
+            modifier = Modifier.weight(1f)
         ) {
             options.forEach {
                 item {

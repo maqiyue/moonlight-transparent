@@ -16,6 +16,7 @@ import com.limelight.R
 import com.limelight.nvstream.NvConnection
 import androidx.core.graphics.ColorUtils
 import android.app.Activity
+import android.annotation.SuppressLint
 
 class FloatingKeyboardButton @JvmOverloads constructor(
     context: Context,
@@ -24,8 +25,8 @@ class FloatingKeyboardButton @JvmOverloads constructor(
     private val conn: NvConnection
 ) : AppCompatImageButton(context, attrs, defStyleAttr) {
     
-    private var lastX: Int = 0
-    private var lastY: Int = 0
+    private var lastX: Float = 0f
+    private var lastY: Float = 0f
     private var isDragging = false
     private var initialX = 0f
     private var initialY = 0f
@@ -49,15 +50,15 @@ class FloatingKeyboardButton @JvmOverloads constructor(
                     isDragging = false
                     isLongPress = false
                     isPressed = true
-                    lastX = event.getRawX().toInt()
-                    lastY = event.getRawY().toInt()
+                    lastX = event.rawX
+                    lastY = event.rawY
                     handler.postDelayed(longPressRunnable, 500)
                     updatePressedState()
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    val dx = event.getRawX().toInt() - lastX
-                    val dy = event.getRawY().toInt() - lastY
+                    val dx = event.getRawX().toInt() - lastX.toInt()
+                    val dy = event.getRawY().toInt() - lastY.toInt()
                     
                     if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
                         isDragging = true
@@ -83,8 +84,8 @@ class FloatingKeyboardButton @JvmOverloads constructor(
                         
                         requestLayout()
                         
-                        lastX = event.getRawX().toInt()
-                        lastY = event.getRawY().toInt()
+                        lastX = event.getRawX().toFloat()
+                        lastY = event.getRawY().toFloat()
                     }
                     true
                 }
@@ -93,6 +94,9 @@ class FloatingKeyboardButton @JvmOverloads constructor(
                     handler.removeCallbacks(longPressRunnable)
                     if (!isDragging && !isLongPress) {
                         performClick()
+                    } else if (isDragging) {
+                        val params = layoutParams as FrameLayout.LayoutParams
+                        game?.saveFloatingKeyboardPosition(params.leftMargin, params.topMargin)
                     }
                     updatePressedState()
                     true

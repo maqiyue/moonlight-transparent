@@ -28,12 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.res.painterResource
 import com.limelight.next.defaultTileBackgroundColor
 
 @Preview
 @Composable
 private fun Preview() {
-    Box(modifier = Modifier.size(96.dp)) {
+    Box(modifier = Modifier.size(92.dp)) {
         MenuOptionTile(icon = Icons.Default.AcUnit, label = "测试")
     }
 }
@@ -44,6 +46,44 @@ fun MenuOptionTile(
     label: String,
     backgroundColor: Color = defaultTileBackgroundColor
 ) {
+    MenuOptionTileImpl(
+        icon = { 
+            Icon(
+                imageVector = icon,
+                contentDescription = "",
+                modifier = Modifier.size(45.dp)
+            )
+        },
+        label = label,
+        backgroundColor = backgroundColor
+    )
+}
+
+@Composable
+fun MenuOptionTile(
+    @DrawableRes iconRes: Int,
+    label: String,
+    backgroundColor: Color = defaultTileBackgroundColor
+) {
+    MenuOptionTileImpl(
+        icon = { 
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = "",
+                modifier = Modifier.size(45.dp)
+            )
+        },
+        label = label,
+        backgroundColor = backgroundColor
+    )
+}
+
+@Composable
+private fun MenuOptionTileImpl(
+    icon: @Composable () -> Unit,
+    label: String,
+    backgroundColor: Color
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,14 +92,11 @@ fun MenuOptionTile(
             .background(backgroundColor)
             .padding(4.dp)
     ) {
-        Icon(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(bottom = 8.dp)
-                .size(48.dp),
-            imageVector = icon,
-            contentDescription = ""
-        )
+        Box(
+            modifier = Modifier.align(Alignment.Center),
+        ) {
+            icon()
+        }
         Text(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

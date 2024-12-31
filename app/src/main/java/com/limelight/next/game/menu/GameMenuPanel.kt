@@ -22,6 +22,7 @@ import com.limelight.nvstream.input.KeyboardPacket
 import com.limelight.preferences.PreferenceConfiguration
 import com.limelight.next.game.menu.options.CancelMenuOption
 import com.limelight.next.game.menu.options.DisconnectMenuOption
+import com.limelight.next.game.menu.options.FloatingKeyboardMenuOption
 import com.limelight.next.game.menu.options.KeyboardMenuOption
 import com.limelight.next.game.menu.options.MenuOption
 import com.limelight.next.game.menu.options.MenuPanelOption
@@ -30,6 +31,7 @@ import com.limelight.next.game.menu.options.PerformanceOverlayMenuOption
 import com.limelight.next.game.menu.options.QuitSessionMenuOption
 import com.limelight.next.game.menu.options.SendKeysMenuOption
 import com.limelight.next.game.menu.options.SpecialButtonMenuOption
+import com.limelight.next.game.menu.options.ThreeFingerKeyboardMenuOption
 import com.limelight.next.game.menu.options.VirtualKeyboardMenuOption
 import com.limelight.next.game.menu.showMenuPanelDialog
 import org.json.JSONObject
@@ -394,9 +396,25 @@ class GameMenuPanel(
             getString(R.string.game_menu_rotate_screen), true, Icons.Rounded.Autorenew,
         ) { game.rotateScreen() })
 
+        options.add(FloatingKeyboardMenuOption(game))
+        options.add(ThreeFingerKeyboardMenuOption(game))
         options.add(PanZoomModeMenuOption(game))
 
 
+        options.add(PerformanceOverlayMenuOption(game))
+
+
+        options.add(KeyboardMenuOption(game))
+
+        options.add(VirtualKeyboardMenuOption(game))
+        if (game.presentation == null) {
+            options.add(MenuOption(
+                getString(R.string.game_menu_select_mouse_mode), true, Icons.Rounded.Mouse
+            ) {
+                game.selectMouseMode()
+            })
+        }
+        options.add(SendKeysMenuOption(game,this))
         options.add(MenuOption(
             getString(R.string.game_menu_task_manager), true, Icons.Rounded.Task
         ) {
@@ -409,26 +427,9 @@ class GameMenuPanel(
             )
         })
 
-
-        options.add(PerformanceOverlayMenuOption(game))
-
-        if (game.presentation == null) {
-            options.add(MenuOption(
-                getString(R.string.game_menu_select_mouse_mode), true, Icons.Rounded.Mouse
-            ) {
-                game.selectMouseMode()
-            })
-        }
-
         options.add(MenuOption(
             getString(R.string.game_menu_advanced), true, Icons.Rounded.Apps,
         ) { this.showAdvancedMenu() })
-
-        options.add(KeyboardMenuOption(game))
-
-        options.add(VirtualKeyboardMenuOption(game))
-
-        options.add(SendKeysMenuOption(game,this))
 
         options.add(CancelMenuOption(game))
 

@@ -537,4 +537,6 @@
     <string name="searchpreference_more">更多</string>
     <string name="searchpreference_clear_history">清除历史</string>
     <string name="searchpreference_no_results">无结果</string>
+    <string name="game_menu_toggle_floating_keyboard">悬浮小键盘</string>
+    <string name="game_menu_toggle_three_finger_keyboard">三指软键盘</string>
 </resources>

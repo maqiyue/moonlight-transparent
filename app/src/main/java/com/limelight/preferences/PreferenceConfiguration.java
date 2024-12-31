@@ -116,7 +116,7 @@ public class PreferenceConfiguration {
     static final String DEFAULT_FPS = "60";
     private static final boolean DEFAULT_ENFORCE_DISPLAY_MODE = false;
     private static final boolean DEFAULT_USE_VIRTUAL_DISPLAY = false;
-    private static final String DEFAULT_VIDEO_SCALE_MODE = "fit";
+    private static final String DEFAULT_VIDEO_SCALE_MODE = "stretch";
     private static final boolean DEFAULT_AUTO_INVERT_VIDEO_RESOLUTION = true;
     private static final int DEFAULT_RESOLUTION_SCALE_FACTOR = 100;
     private static final boolean DEFAULT_SOPS = true;
@@ -288,6 +288,12 @@ public class PreferenceConfiguration {
     public boolean gamepadMotionSensors;
     public boolean gamepadTouchpadAsMouse;
     public boolean gamepadMotionSensorsFallbackToDevice;
+    public boolean enableFloatingKeyboard;
+    public boolean enableThreeFingerKeyboard;
+    
+    public static final String ENABLE_FLOATING_KEYBOARD = "enable_floating_keyboard";
+    public static final String ENABLE_THREE_FINGER_KEYBOARD = "enable_three_finger_keyboard";
+
 
     public static boolean isNativeResolution(int width, int height) {
         // It's not a native resolution if it matches an existing resolution option
@@ -842,7 +848,8 @@ public class PreferenceConfiguration {
         config.gamepadTouchpadAsMouse = prefs.getBoolean(GAMEPAD_TOUCHPAD_AS_MOUSE_PREF_STRING, DEFAULT_GAMEPAD_TOUCHPAD_AS_MOUSE);
         config.gamepadMotionSensors = prefs.getBoolean(GAMEPAD_MOTION_SENSORS_PREF_STRING, DEFAULT_GAMEPAD_MOTION_SENSORS);
         config.gamepadMotionSensorsFallbackToDevice = prefs.getBoolean(GAMEPAD_MOTION_FALLBACK_PREF_STRING, DEFAULT_GAMEPAD_MOTION_FALLBACK);
-
+        config.enableFloatingKeyboard = prefs.getBoolean(ENABLE_FLOATING_KEYBOARD, true);
+        config.enableThreeFingerKeyboard = prefs.getBoolean(ENABLE_THREE_FINGER_KEYBOARD, true);
         return config;
     }
 }

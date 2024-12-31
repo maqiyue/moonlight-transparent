@@ -34,7 +34,7 @@ class CircularMenuView @JvmOverloads constructor(
 ) : View(context) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val radius = 180f
+    private val radius = 200f
     private val centerRadius = 40f
     private val itemRadius = 45f
     private var centerX = 0f
