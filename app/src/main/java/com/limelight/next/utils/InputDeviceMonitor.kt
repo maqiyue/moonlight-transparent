@@ -72,7 +72,10 @@ class InputDeviceMonitor(private val game: Game) : InputManager.InputDeviceListe
         if (!isPhysicalDevice) {
             return false
         }
-
+        //笔会被识别为键盘 我只试了一款平板 不知道会不会有问题
+        if (device.name.contains("Pencil")){
+            return false
+        }
         // 检查设备类型
         val sources = device.sources
         return (sources and SOURCE_KEYBOARD) == SOURCE_KEYBOARD ||
