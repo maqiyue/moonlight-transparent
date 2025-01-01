@@ -84,6 +84,18 @@ public class StreamSettings extends AppCompatActivity implements SearchPreferenc
 
     @Override
     public void onSearchResultClicked(SearchPreferenceResult result) {
+        String key = result.getKey();
+        
+        // 遍历所有分类，找到包含搜索结果的分类并展开它
+        PreferenceScreen screen = prefsFragment.getPreferenceScreen();
+        for (int i = 0; i < screen.getPreferenceCount(); i++) {
+            if (screen.getPreference(i) instanceof CollapsiblePreferenceCategory) {
+                CollapsiblePreferenceCategory category = 
+                    (CollapsiblePreferenceCategory) screen.getPreference(i);
+                category.expandIfNeeded(key);
+            }
+        }
+        
         result.closeSearchPage(this);
         result.highlight(prefsFragment);
     }

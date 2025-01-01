@@ -46,4 +46,23 @@ public class CollapsiblePreferenceCategory extends PreferenceCategory {
             getPreference(i).setVisible(isExpanded);
         }
     }
+
+    public boolean containsPreferenceKey(String key) {
+        if (key == null) return false;
+        
+        for (int i = 0; i < getPreferenceCount(); i++) {
+            if (key.equals(getPreference(i).getKey())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void expandIfNeeded(String key) {
+        if (!isExpanded && containsPreferenceKey(key)) {
+            isExpanded = true;
+            updateExpandState();
+            handler.post(() -> notifyChanged());
+        }
+    }
 } 
