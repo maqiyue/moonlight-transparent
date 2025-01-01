@@ -22,7 +22,6 @@ class FloatingKeyboardButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    private val conn: NvConnection
 ) : AppCompatImageButton(context, attrs, defStyleAttr) {
     
     private var lastX: Float = 0f

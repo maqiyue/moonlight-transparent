@@ -683,7 +683,7 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
 
         // 初始化外设监听
         inputDeviceMonitor = new InputDeviceMonitor(this);
-        if (getPreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD) && inputDeviceMonitor.hasConnectedDevices()) {
+        if (getPreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD) && !inputDeviceMonitor.hasConnectedDevices()) {
             showFloatingKeyboard();
         }
     }
@@ -3487,23 +3487,6 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
     }
 
 
-    // 设置surfaceView的圆角 setSurfaceviewCorner(UiHelper.dpToPx(this,24));
-    private void setSurfaceviewCorner(final float radius) {
-
-        streamView.setOutlineProvider(new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                Rect rect = new Rect();
-                view.getGlobalVisibleRect(rect);
-                int leftMargin = 0;
-                int topMargin = 0;
-                Rect selfRect = new Rect(leftMargin, topMargin, rect.right - rect.left - leftMargin, rect.bottom - rect.top - topMargin);
-                outline.setRoundRect(selfRect, radius);
-            }
-        });
-        streamView.setClipToOutline(true);
-    }
-
     // 保存配置的方法
     public void savePreference(String key, boolean value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -3544,7 +3527,7 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
             floatingButton.setVisibility(View.VISIBLE);
             return;  
         }
-        floatingButton = new FloatingKeyboardButton(this, conn);
+        floatingButton = new FloatingKeyboardButton(this);
         floatingButton.setGame(this);
         
         // 从 SharedPreferences 加载上次保存的位置
