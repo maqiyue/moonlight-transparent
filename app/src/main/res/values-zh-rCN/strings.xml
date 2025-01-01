@@ -466,6 +466,7 @@
     <string name="keyboard_layout_set_3">预设 3</string>
     <string name="keyboard_layout_set_4">预设 4</string>
     <string name="keyboard_layout_set_5">预设 5</string>
+    <string name="toggle_remote_mouse_cursor">切换远程光标</string>
     <string name="toggle_local_mouse_cursor">切换本地光标(需外接物理鼠标)</string>
     <string name="debug_info_android_version">安卓版本：</string>
     <string name="debug_info_api_version">api版本：</string>

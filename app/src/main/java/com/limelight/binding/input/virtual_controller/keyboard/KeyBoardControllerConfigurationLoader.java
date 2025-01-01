@@ -4,7 +4,8 @@
 
 package com.limelight.binding.input.virtual_controller.keyboard;
 
-import static com.limelight.GameMenu.getModifier;
+
+import static com.limelight.Game.getModifier;
 
 import android.app.Activity;
 import android.content.Context;

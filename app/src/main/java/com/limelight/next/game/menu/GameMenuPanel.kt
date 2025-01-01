@@ -38,7 +38,6 @@ import org.json.JSONObject
 
 class GameMenuPanel(
     private val game: Game,
-    private val conn: NvConnection,
     private val device: GameInputDevice?
 ) {
 
@@ -48,29 +47,6 @@ class GameMenuPanel(
 
     private fun getString(id: Int): String {
         return game.resources.getString(id)
-    }
-
-    private fun sendKeys(keys: ShortArray) {
-        val modifier = byteArrayOf(0.toByte())
-
-        for (key in keys) {
-            conn.sendKeyboardInput(key, KeyboardPacket.KEY_DOWN, modifier[0], 0.toByte())
-
-            // Apply the modifier of the pressed key, e.g. CTRL first issues a CTRL event (without
-            // modifier) and then sends the following keys with the CTRL modifier applied
-            modifier[0] = (modifier[0].toInt() or getModifier(key).toInt()).toByte()
-        }
-
-        Handler(Looper.getMainLooper()).postDelayed((Runnable {
-            for (pos in keys.indices.reversed()) {
-                val key = keys[pos]
-
-                // Remove the keys modifier before releasing the key
-                modifier[0] = (modifier[0].toInt() and getModifier(key).toInt().inv()).toByte()
-
-                conn.sendKeyboardInput(key, KeyboardPacket.KEY_UP, modifier[0], 0.toByte())
-            }
-        }), KEY_UP_DELAY)
     }
 
     private fun runWithGameFocus(runnable: Runnable?) {
@@ -99,16 +75,16 @@ class GameMenuPanel(
         if (!PreferenceConfiguration.readPreferences(game).enableClearDefaultSpecial) {
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_esc)
-            ) { sendKeys(shortArrayOf(KeyboardTranslator.VK_ESCAPE.toShort())) })
+            ) { game.sendKeys(shortArrayOf(KeyboardTranslator.VK_ESCAPE.toShort())) })
 
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_f11)
-            ) { sendKeys(shortArrayOf(KeyboardTranslator.VK_F11.toShort())) })
+            ) { game.sendKeys(shortArrayOf(KeyboardTranslator.VK_F11.toShort())) })
 
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_alt_f4)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LMENU.toShort(),
                         KeyboardTranslator.VK_F4.toShort()
@@ -119,7 +95,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_alt_enter)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LMENU.toShort(),
                         KeyboardTranslator.VK_RETURN.toShort()
@@ -130,7 +106,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_ctrl_v)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LCONTROL.toShort(),
                         KeyboardTranslator.VK_V.toShort()
@@ -140,12 +116,12 @@ class GameMenuPanel(
 
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_win)
-            ) { sendKeys(shortArrayOf(KeyboardTranslator.VK_LWIN.toShort())) })
+            ) { game.sendKeys(shortArrayOf(KeyboardTranslator.VK_LWIN.toShort())) })
 
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_win_d)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_D.toShort()
@@ -156,7 +132,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_win_g)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_G.toShort()
@@ -167,7 +143,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_ctrl_alt_tab)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LCONTROL.toShort(),
                         KeyboardTranslator.VK_LMENU.toShort(),
@@ -179,7 +155,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_shift_tab)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LSHIFT.toShort(),
                         KeyboardTranslator.VK_TAB.toShort()
@@ -190,7 +166,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_win_shift_left)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_LSHIFT.toShort(),
@@ -202,7 +178,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_ctrl_alt_shift_q)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LCONTROL.toShort(),
                         KeyboardTranslator.VK_LMENU.toShort(),
@@ -215,7 +191,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_ctrl_alt_shift_f1)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LCONTROL.toShort(),
                         KeyboardTranslator.VK_LMENU.toShort(),
@@ -228,7 +204,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_ctrl_alt_shift_f12)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LCONTROL.toShort(),
                         KeyboardTranslator.VK_LMENU.toShort(),
@@ -241,7 +217,7 @@ class GameMenuPanel(
             options.add(SpecialButtonMenuOption(
                 getString(R.string.game_menu_send_keys_alt_b)
             ) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_LMENU.toShort(),
@@ -250,14 +226,14 @@ class GameMenuPanel(
                 )
             })
             options.add(SpecialButtonMenuOption(getString(R.string.game_menu_send_keys_win_x_u_s)) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_X.toShort()
                     )
                 )
                 Handler().postDelayed((Runnable {
-                    sendKeys(
+                    game.sendKeys(
                         shortArrayOf(
                             KeyboardTranslator.VK_U.toShort(),
                             KeyboardTranslator.VK_S.toShort()
@@ -266,14 +242,14 @@ class GameMenuPanel(
                 }), 200)
             })
             options.add(SpecialButtonMenuOption(getString(R.string.game_menu_send_keys_win_x_u_u)) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_X.toShort()
                     )
                 )
                 Handler().postDelayed((Runnable {
-                    sendKeys(
+                    game.sendKeys(
                         shortArrayOf(
                             KeyboardTranslator.VK_U.toShort(),
                             KeyboardTranslator.VK_U.toShort()
@@ -282,14 +258,14 @@ class GameMenuPanel(
                 }), 200)
             })
             options.add(SpecialButtonMenuOption(getString(R.string.game_menu_send_keys_win_x_u_r)) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_X.toShort()
                     )
                 )
                 Handler().postDelayed((Runnable {
-                    sendKeys(
+                    game.sendKeys(
                         shortArrayOf(
                             KeyboardTranslator.VK_U.toShort(),
                             KeyboardTranslator.VK_R.toShort()
@@ -298,14 +274,14 @@ class GameMenuPanel(
                 }), 200)
             })
             options.add(SpecialButtonMenuOption(getString(R.string.game_menu_send_keys_win_x_u_i)) {
-                sendKeys(
+                game.sendKeys(
                     shortArrayOf(
                         KeyboardTranslator.VK_LWIN.toShort(),
                         KeyboardTranslator.VK_X.toShort()
                     )
                 )
                 Handler().postDelayed((Runnable {
-                    sendKeys(
+                    game.sendKeys(
                         shortArrayOf(
                             KeyboardTranslator.VK_U.toShort(),
                             KeyboardTranslator.VK_I.toShort()
@@ -333,7 +309,7 @@ class GameMenuPanel(
                             val code = array1.getString(j)
                             datas[j] = code.substring(2).toInt(16).toShort()
                         }
-                        val option = MenuOption(name) { sendKeys(datas) }
+                        val option = MenuOption(name) { game.sendKeys(datas) }
                         options.add(option)
                     }
                 }
@@ -418,7 +394,7 @@ class GameMenuPanel(
         options.add(MenuOption(
             getString(R.string.game_menu_task_manager), true, Icons.Rounded.Task
         ) {
-            sendKeys(
+            game.sendKeys(
                 shortArrayOf(
                     KeyboardTranslator.VK_LCONTROL.toShort(),
                     KeyboardTranslator.VK_LSHIFT.toShort(),
@@ -438,20 +414,12 @@ class GameMenuPanel(
 
     companion object {
         private const val TEST_GAME_FOCUS_DELAY: Long = 10
-        private const val KEY_UP_DELAY: Long = 25
+     
 
         const val PREF_NAME: String = "specialPrefs" // SharedPreferences的名称
 
         const val KEY_NAME: String = "special_key" // 要保存的键名称
 
-        private fun getModifier(key: Short): Byte {
-            return when (key.toInt()) {
-                KeyboardTranslator.VK_LSHIFT -> KeyboardPacket.MODIFIER_SHIFT
-                KeyboardTranslator.VK_LCONTROL -> KeyboardPacket.MODIFIER_CTRL
-                KeyboardTranslator.VK_LWIN -> KeyboardPacket.MODIFIER_META
-                KeyboardTranslator.VK_LMENU -> KeyboardPacket.MODIFIER_ALT
-                else -> 0
-            }
-        }
+       
     }
 }

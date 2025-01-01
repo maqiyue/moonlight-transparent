@@ -2,6 +2,7 @@ package com.limelight;
 
 
 
+
 import com.limelight.binding.PlatformBinding;
 import com.limelight.binding.audio.AndroidAudioRenderer;
 import com.limelight.binding.input.ControllerHandler;
@@ -23,6 +24,7 @@ import com.limelight.binding.video.MediaCodecDecoderRenderer;
 import com.limelight.binding.video.MediaCodecHelper;
 import com.limelight.binding.video.PerfOverlayListener;
 
+import com.limelight.next.utils.InputDeviceMonitor;
 import com.limelight.nvstream.NvConnection;
 import com.limelight.nvstream.NvConnectionListener;
 import com.limelight.nvstream.StreamConfiguration;
@@ -253,6 +255,8 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
     public GameMenuCallbacks gameMenuCallbacks;
 
     private FloatingKeyboardButton floatingButton;
+
+    private InputDeviceMonitor inputDeviceMonitor;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -677,9 +681,10 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
 
         gameMenuCallbacks = new GameMenu(this, conn);
 
-
-        if (getPreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD)) {
-            addFloatingKeyboardButton();
+        // 初始化外设监听
+        inputDeviceMonitor = new InputDeviceMonitor(this);
+        if (getPreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD) && inputDeviceMonitor.hasConnectedDevices()) {
+            showFloatingKeyboard();
         }
     }
 
@@ -1294,6 +1299,10 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
 
         // Destroy the capture provider
         inputCaptureProvider.destroy();
+
+        if (inputDeviceMonitor != null) {
+            inputDeviceMonitor.release();
+        }
     }
 
     @Override
@@ -3205,6 +3214,7 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         }
     }
 
+
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
         // Don't do anything if we're not connected
@@ -3299,7 +3309,8 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
 
     public void selectMouseMode(){
         String[] strings = getResources().getStringArray(R.array.mouse_mode_names);
-        String[] items = Arrays.copyOf(strings, strings.length + 1);
+        String[] items = Arrays.copyOf(strings, strings.length + 2);
+        items[items.length - 2] = getString(R.string.toggle_remote_mouse_cursor);
         items[items.length - 1] = getString(R.string.toggle_local_mouse_cursor);
         int currentMode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("mouse_mode_list", "0"));
 
@@ -3309,24 +3320,24 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                
                 // 当前选中的鼠标模式显示为 50% 透明度的翠绿色
                 if (position == currentMode && position != items.length - 1) {
                     textView.setBackgroundColor(0x6000FF00);  // 50% 透明度的翠绿色 (#80 = 50% 透明度)} else {
-
                 }else {
                     textView.setBackgroundColor(0x00000000);
             }
-
-
                 return textView;
             }
         };
 
         builder.setAdapter(adapter, (dialog, which) -> {
             dialog.dismiss();
-            if(which == strings.length){
+            if(which == strings.length + 1){
                 toggleMouseLocalCursor();
+                return;
+            }
+            if(which == strings.length ){
+                sendKeys(new short[]{KeyboardTranslator.VK_LCONTROL, KeyboardTranslator.VK_LMENU, KeyboardTranslator.VK_LSHIFT,KeyboardTranslator.VK_N });
                 return;
             }
             applyMouseMode(which);
@@ -3439,7 +3450,7 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
     public void showGameMenu(GameInputDevice device) {
         if (gameMenuCallbacks != null) {
             // 使用 next 包中的新菜单替代原有菜单
-            new GameMenuPanel(this, conn, device);
+            new GameMenuPanel(this, device);
         }
     }
 
@@ -3505,7 +3516,7 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         prefs.edit().putString(key, value).apply();
     }
 
-    // 获取悬浮小键盘显示状态
+    // 获取悬浮小键盘配置状态
     public boolean isFloatingKeyboardShowing() {
         return prefConfig.enableFloatingKeyboard;  // 直接使用配置变量
     }
@@ -3515,15 +3526,10 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         boolean newState = !prefConfig.enableFloatingKeyboard;
         prefConfig.enableFloatingKeyboard = newState;  // 更新变量
         savePreference(PreferenceConfiguration.ENABLE_FLOATING_KEYBOARD, newState);  // 永久存储
-        
         if (newState) {
-            if (floatingButton == null) {
-                addFloatingKeyboardButton();
-            } else {
-                floatingButton.setVisibility(View.VISIBLE);
-            }
+            showFloatingKeyboard();
         } else if (floatingButton != null) {
-            floatingButton.setVisibility(View.GONE);
+            hideFloatingKeyboard();
         }
     }
 
@@ -3533,10 +3539,10 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         return prefs.getBoolean(key, false);
     }
 
-    // 添加新方法用于创建和添加按钮
-    private void addFloatingKeyboardButton() {
+    public void showFloatingKeyboard() {
         if (floatingButton != null) {
-            return;  // 避免重复添加
+            floatingButton.setVisibility(View.VISIBLE);
+            return;  
         }
         floatingButton = new FloatingKeyboardButton(this, conn);
         floatingButton.setGame(this);
@@ -3556,7 +3562,7 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         ((FrameLayout)findViewById(android.R.id.content)).addView(floatingButton, params);
     }
 
-    // 添加保存位置的方法
+    // 保存位置
     public void saveFloatingKeyboardPosition(int x, int y) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putInt("floating_keyboard_x", x);
@@ -3569,11 +3575,57 @@ public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         return prefConfig.enableThreeFingerKeyboard;
     }
 
-    // 切换三指键盘状态
+    // 三指键盘开关状态
     public void toggleThreeFingerKeyboard() {
         boolean newState = !prefConfig.enableThreeFingerKeyboard;
         prefConfig.enableThreeFingerKeyboard = newState;  // 更新变量
         savePreference(PreferenceConfiguration.ENABLE_THREE_FINGER_KEYBOARD, newState);  // 永久存储
-        // TODO: 这里可以添加其他三指键盘切换时需要的逻辑
+    }
+
+    public void hideFloatingKeyboard() {
+        if (floatingButton != null) {
+            floatingButton.setVisibility(View.GONE);
+        }
+    }
+
+    public static byte getModifier(short key) {
+        switch (key) {
+            case KeyboardTranslator.VK_LSHIFT:
+                return KeyboardPacket.MODIFIER_SHIFT;
+            case KeyboardTranslator.VK_LCONTROL:
+                return KeyboardPacket.MODIFIER_CTRL;
+            case KeyboardTranslator.VK_LWIN:
+                return KeyboardPacket.MODIFIER_META;
+            case KeyboardTranslator.VK_LMENU:
+                return KeyboardPacket.MODIFIER_ALT;
+            default:
+                return 0;
+        }
+    }
+
+    private static final long KEY_UP_DELAY = 25;
+
+    //从GameMenu拿出来的
+    public void sendKeys(short[] keys) {
+        final byte[] modifier = {(byte) 0};
+
+        for (short key : keys) {
+            conn.sendKeyboardInput(key, KeyboardPacket.KEY_DOWN, modifier[0], (byte) 0);
+
+            // Apply the modifier of the pressed key, e.g. CTRL first issues a CTRL event (without
+            // modifier) and then sends the following keys with the CTRL modifier applied
+            modifier[0] |= getModifier(key);
+        }
+
+        new Handler().postDelayed((() -> {
+            for (int pos = keys.length - 1; pos >= 0; pos--) {
+                short key = keys[pos];
+
+                // Remove the keys modifier before releasing the key
+                modifier[0] &= (byte) ~getModifier(key);
+
+                conn.sendKeyboardInput(key, KeyboardPacket.KEY_UP, modifier[0], (byte) 0);
+            }
+        }), KEY_UP_DELAY);
     }
 }

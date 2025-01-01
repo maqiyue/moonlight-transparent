@@ -19,6 +19,7 @@ import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.FrameLayout
 import androidx.core.graphics.ColorUtils
+import com.limelight.Game
 import com.limelight.binding.input.KeyboardTranslator
 import com.limelight.nvstream.NvConnection
 import com.limelight.nvstream.input.KeyboardPacket
@@ -29,7 +30,7 @@ import kotlin.math.sin
 
 class CircularMenuView @JvmOverloads constructor(
     context: Context,
-    private val conn: NvConnection,
+    private val game: Game,
     private val anchorView: View
 ) : View(context) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -227,7 +228,7 @@ class CircularMenuView @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP -> {
                 if (selectedIndex != -1) {
-                    sendKeys(menuItems[selectedIndex].keyCodes)
+                    game.sendKeys(menuItems[selectedIndex].keyCodes)
                     pressedIndex = -1
                     invalidate()
                 }
@@ -297,48 +298,6 @@ class CircularMenuView @JvmOverloads constructor(
                 }
             })
         }.start()
-    }
-
-    companion object {
-        private const val TEST_GAME_FOCUS_DELAY: Long = 10
-        private const val KEY_UP_DELAY: Long = 25
-
-        const val PREF_NAME: String = "specialPrefs" // SharedPreferences的名称
-
-        const val KEY_NAME: String = "special_key" // 要保存的键名称
-
-        private fun getModifier(key: Short): Byte {
-            return when (key.toInt()) {
-                KeyboardTranslator.VK_LSHIFT -> KeyboardPacket.MODIFIER_SHIFT
-                KeyboardTranslator.VK_LCONTROL -> KeyboardPacket.MODIFIER_CTRL
-                KeyboardTranslator.VK_LWIN -> KeyboardPacket.MODIFIER_META
-                KeyboardTranslator.VK_LMENU -> KeyboardPacket.MODIFIER_ALT
-                else -> 0
-            }
-        }
-    }
-
-    private fun sendKeys(keys: ShortArray) {
-        val modifier = byteArrayOf(0.toByte())
-
-        for (key in keys) {
-            conn.sendKeyboardInput(key, KeyboardPacket.KEY_DOWN, modifier[0], 0.toByte())
-
-            // Apply the modifier of the pressed key, e.g. CTRL first issues a CTRL event (without
-            // modifier) and then sends the following keys with the CTRL modifier applied
-            modifier[0] = (modifier[0].toInt() or getModifier(key).toInt()).toByte()
-        }
-
-        Handler(Looper.getMainLooper()).postDelayed((Runnable {
-            for (pos in keys.indices.reversed()) {
-                val key = keys[pos]
-
-                // Remove the keys modifier before releasing the key
-                modifier[0] = (modifier[0].toInt() and getModifier(key).toInt().inv()).toByte()
-
-                conn.sendKeyboardInput(key, KeyboardPacket.KEY_UP, modifier[0], 0.toByte())
-            }
-        }), KEY_UP_DELAY)
     }
 
     private fun startHideAnimation(onAnimationEnd: () -> Unit) {

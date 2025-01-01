@@ -122,9 +122,9 @@ class FloatingKeyboardButton @JvmOverloads constructor(
     }
 
     private fun showCircularMenu() {
-        val menu = CircularMenuView(context, conn, this)
+        val menu = CircularMenuView(context, game!!, this)
         val params = FrameLayout.LayoutParams(600, 600)
-        
+
         val location = IntArray(2)
         getLocationOnScreen(location)
         

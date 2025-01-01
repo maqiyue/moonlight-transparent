@@ -493,6 +493,7 @@
     <string name="keyboard_layout_set_3">Profile 3</string>
     <string name="keyboard_layout_set_4">Profile 4</string>
     <string name="keyboard_layout_set_5">Profile 5</string>
+    <string name="toggle_remote_mouse_cursor">Toggle remote mouse cursor</string>
     <string name="toggle_local_mouse_cursor">Toggle local mouse cursor(physical mouse needed)</string>
     <string name="debug_info_android_version">Android Version:</string>
     <string name="debug_info_api_version">API Version:</string>
