@@ -29,6 +29,7 @@ import com.limelight.utils.HelpLauncher;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.UiHelper;
+import com.limelight.zerotier.ZeroTierManager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -43,6 +44,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.ContextMenu;
@@ -55,6 +58,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -105,6 +109,8 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
             managerBinder = null;
         }
     };
+
+    private ZeroTierManager zeroTierManager;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -194,6 +200,10 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
             noPcFoundLayout.setVisibility(View.INVISIBLE);
         }
         pcGridAdapter.notifyDataSetChanged();
+
+        // 设置 ZeroTier 按钮点击事件
+        ImageButton zeroTierButton = findViewById(R.id.zeroTierButton);
+        zeroTierButton.setOnClickListener(v -> showZeroTierDialog());
     }
 
     @Override
@@ -255,6 +265,16 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
             pendingPairingPin = null;
             pendingPairingPassphrase = null;
         }
+
+        zeroTierManager = new ZeroTierManager(this);
+        
+        // 添加 ZeroTier 按钮
+        Button zeroTierButton = new Button(this);
+        zeroTierButton.setText("Join ZeroTier");
+        zeroTierButton.setOnClickListener(v -> showZeroTierDialog());
+        
+        // 将按钮添加到布局中
+        // TODO: 根据实际布局调整
     }
 
     private void completeOnCreate() {
@@ -843,5 +863,49 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
         });
         
         builder.show();
+    }
+
+    private void showZeroTierDialog() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        
+        new AlertDialog.Builder(this)
+            .setTitle("ZeroTier Network Status")
+            .setMessage("Initializing ZeroTier network...\nThis may take a few moments.")
+            .setPositiveButton("Close", null)
+            .show();
+            
+        zeroTierManager.initialize();
+        
+        handler.postDelayed(() -> {
+            int status = zeroTierManager.getNetworkStatus();
+            String[] addresses = zeroTierManager.getNetworkAddresses();
+            
+            StringBuilder message = new StringBuilder();
+            message.append("Status: ").append(status).append("\n");
+            message.append("Status Description: ").append(getStatusDescription(status)).append("\n\n");
+            message.append("Addresses:\n");
+            if (addresses != null && addresses.length > 0) {
+                for (String address : addresses) {
+                    message.append("• ").append(address).append("\n");
+                }
+            } else {
+                message.append("No addresses available yet\n");
+            }
+            
+            new AlertDialog.Builder(this)
+                .setTitle("ZeroTier Network Status")
+                .setMessage(message.toString())
+                .setPositiveButton("Close", null)
+                .show();
+        }, 5000);
+    }
+
+    private String getStatusDescription(int status) {
+        switch (status) {
+            case 0: return "OFFLINE";
+            case 1: return "ONLINE";
+            case -1: return "ERROR";
+            default: return "UNKNOWN (" + status + ")";
+        }
     }
 }
