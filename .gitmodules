@@ -1,3 +1,6 @@
 [submodule "app/src/main/jni/moonlight-core/moonlight-common-c"]
 	path = app/src/main/jni/moonlight-core/moonlight-common-c
 	url = https://github.com/ClassicOldSong/moonlight-common-c
+[submodule "app/jni/zerotier/libzt"]
+	path = app/jni/zerotier/libzt
+	url = https://github.com/zerotier/libzt.git
