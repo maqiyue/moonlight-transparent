@@ -29,6 +29,7 @@ import com.limelight.utils.HelpLauncher;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.UiHelper;
+import com.limelight.zerotier.ZeroTierConnectionManager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -43,6 +44,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.ContextMenu;
@@ -105,6 +108,11 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
             managerBinder = null;
         }
     };
+
+    private ImageButton zeroTierButton;
+    private ZeroTierConnectionManager zeroTierManager;
+    private boolean isZeroTierEnabled = false;
+    private static final String ZEROTIER_NETWORK_ID = "xxxxx"; // 你的网络 ID
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -194,6 +202,50 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
             noPcFoundLayout.setVisibility(View.INVISIBLE);
         }
         pcGridAdapter.notifyDataSetChanged();
+
+        // 初始化 ZeroTier 按钮
+        zeroTierButton = findViewById(R.id.zeroTierButton);
+        zeroTierButton.setAlpha(0.5f); // 默认置灰
+        zeroTierManager = ZeroTierConnectionManager.getInstance();
+        
+        zeroTierButton.setOnClickListener(v -> {
+            if (!isZeroTierEnabled) {
+                // 启用 ZeroTier
+                zeroTierManager.init(getFilesDir().getPath());
+                if (zeroTierManager.connect(ZEROTIER_NETWORK_ID)) {
+                    isZeroTierEnabled = true;
+                    zeroTierButton.setAlpha(1.0f);
+                    Toast.makeText(this, "ZeroTier 已连接", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "ZeroTier 连接失败", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // 关闭 ZeroTier
+                zeroTierManager.disconnect();
+                isZeroTierEnabled = false;
+                zeroTierButton.setAlpha(0.5f);
+                Toast.makeText(this, "ZeroTier 已断开", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 注册状态监听器
+        registerZeroTierStateCallback();
+    }
+
+    private void registerZeroTierStateCallback() {
+        // 创建一个 Handler 用于在主线程更新 UI
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        // 注册回调监听
+        ZeroTierConnectionManager.getInstance().setStateCallback(connected -> {
+            mainHandler.post(() -> {
+                isZeroTierEnabled = connected;
+                zeroTierButton.setAlpha(connected ? 1.0f : 0.5f);
+                if (!connected) {
+                    Toast.makeText(this, "ZeroTier 连接已断开", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     @Override
@@ -338,6 +390,9 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
 
         if (managerBinder != null) {
             unbindService(serviceConnection);
+        }
+        if (isZeroTierEnabled) {
+            zeroTierManager.disconnect();
         }
     }
 
