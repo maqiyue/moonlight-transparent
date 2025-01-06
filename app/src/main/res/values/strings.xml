@@ -169,6 +169,9 @@
     <string name="summary_seekbar_bitrate">Increase for better image quality. Decrease to improve performance on slower connections.</string>
     <string name="title_seekbar_bitrate_mobile">Video bitrate (Mobile)</string>
     <string name="summary_seekbar_bitrate_mobile">Video bitrate used when connected to mobile network</string>
+    <string name="zerotier_network">zerotier support</string>
+    <string name="zerotier_network_summer">enter the ZeroTier Network ID. After successful configuration, a button to connect to ZeroTier will be displayed on the device list page.</string>
+
     <string name="suffix_seekbar_bitrate_mbps">Mbps</string>
     <string name="title_resolution_scale_factor">Resolution Scale Factor</string>
     <string name="summary_resolution_scale_factor">Server side requested virtual screen resolution will be multiplied by this factor. Streaming resolution are not affected.\ne.g. 120% will make 2000x1000 become 2400x1200.\nSetting a higher scale factor will improve image quality for some games.\nRequires Apollo to take effect.</string>

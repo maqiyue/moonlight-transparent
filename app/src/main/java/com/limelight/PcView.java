@@ -54,6 +54,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -61,12 +62,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import androidx.preference.PreferenceManager;
 
+import org.jcodec.common.StringUtils;
 import org.xmlpull.v1.XmlPullParserException;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -112,7 +115,6 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
     private ImageButton zeroTierButton;
     private ZeroTierConnectionManager zeroTierManager;
     private boolean isZeroTierEnabled = false;
-    private static final String ZEROTIER_NETWORK_ID = "xxxxx"; // 你的网络 ID
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -154,9 +156,9 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
 
         // Set default preferences if we've never been run
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
+        PreferenceConfiguration preferenceConfiguration = PreferenceConfiguration.readPreferences(this);
         // Set the correct layout for the PC grid
-        pcGridAdapter.updateLayoutWithPreferences(this, PreferenceConfiguration.readPreferences(this));
+        pcGridAdapter.updateLayoutWithPreferences(this, preferenceConfiguration);
 
         // Setup the list view
         ImageButton settingsButton = findViewById(R.id.settingsButton);
@@ -202,31 +204,38 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
             noPcFoundLayout.setVisibility(View.INVISIBLE);
         }
         pcGridAdapter.notifyDataSetChanged();
-
-        // 初始化 ZeroTier 按钮
+        String networkId = preferenceConfiguration.networkId;
         zeroTierButton = findViewById(R.id.zeroTierButton);
-        zeroTierButton.setAlpha(0.5f); // 默认置灰
-        zeroTierManager = ZeroTierConnectionManager.getInstance();
-        
-        zeroTierButton.setOnClickListener(v -> {
-            if (!isZeroTierEnabled) {
-                // 启用 ZeroTier
-                zeroTierManager.init(getFilesDir().getPath());
-                if (zeroTierManager.connect(ZEROTIER_NETWORK_ID)) {
-                    isZeroTierEnabled = true;
-                    zeroTierButton.setAlpha(1.0f);
-                    Toast.makeText(this, "ZeroTier 已连接", Toast.LENGTH_SHORT).show();
+        if(StringUtils.isEmpty(networkId)){
+            zeroTierButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            // 初始化 ZeroTier 按钮
+            zeroTierButton.setVisibility(View.VISIBLE);
+
+            zeroTierButton.setAlpha(0.5f); // 默认置灰
+            zeroTierManager = ZeroTierConnectionManager.getInstance();
+
+            zeroTierButton.setOnClickListener(v -> {
+                if (!isZeroTierEnabled) {
+                    // 启用 ZeroTier
+                    zeroTierManager.init(getFilesDir().getPath());
+                    if (zeroTierManager.connect(networkId)) {
+                        isZeroTierEnabled = true;
+                        zeroTierButton.setAlpha(1.0f);
+                        Toast.makeText(this, "ZeroTier 已连接", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "ZeroTier 连接失败", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(this, "ZeroTier 连接失败", Toast.LENGTH_SHORT).show();
+                    // 关闭 ZeroTier
+                    zeroTierManager.disconnect();
+                    isZeroTierEnabled = false;
+                    zeroTierButton.setAlpha(0.5f);
+                    Toast.makeText(this, "ZeroTier 已断开", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                // 关闭 ZeroTier
-                zeroTierManager.disconnect();
-                isZeroTierEnabled = false;
-                zeroTierButton.setAlpha(0.5f);
-                Toast.makeText(this, "ZeroTier 已断开", Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        }
 
         // 注册状态监听器
         registerZeroTierStateCallback();

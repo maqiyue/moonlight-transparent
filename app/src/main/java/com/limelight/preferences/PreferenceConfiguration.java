@@ -42,6 +42,7 @@ public class PreferenceConfiguration {
     static final String BITRATE_PREF_STRING = "seekbar_bitrate_kbps";
     private static final String BITRATE_PREF_OLD_STRING = "seekbar_bitrate";
     private static final String BITRATE_MOBILE_PREF_STRING = "seekbar_bitrate_mobile_kbps";
+    private static final String NET_WORK_ID = "edit_network_id";
     private static final String ENFORCE_DISPLAY_MODE_PREF_STRING = "checkbox_enforce_display_mode";
     private static final String USE_VIRTUAL_DISPLAY_PREF_STRING = "checkbox_use_virtual_display";
     private static final String AUTO_INVERT_VIDEO_RESOLUTION_PREF_STRING = "checkbox_auto_invert_video_resolution";
@@ -180,6 +181,7 @@ public class PreferenceConfiguration {
 
     public int width, height, fps;
     public int bitrate;
+    public String networkId;
     public FormatOption videoFormat;
     public int deadzonePercentage;
     public int oscOpacity;
@@ -729,7 +731,7 @@ public class PreferenceConfiguration {
                     prefs.getInt(BITRATE_PREF_STRING, prefs.getInt(BITRATE_PREF_OLD_STRING, 0) * 1000));
         }
 
-
+        config.networkId = prefs.getString(NET_WORK_ID,null);
 
         String audioConfig = prefs.getString(AUDIO_CONFIG_PREF_STRING, DEFAULT_AUDIO_CONFIG);
         if (audioConfig.equals("71")) {
