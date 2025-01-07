@@ -26,3 +26,8 @@
 # jMDNS
 -dontwarn javax.jmdns.impl.DNSCache
 -dontwarn org.slf4j.**
+
+# 保留 ZeroTier 相关类
+-keep class com.zerotier.** { *; }
+-keepclassmembers class com.zerotier.** { *; }
+-keepclassmembers class com.limelight.zerotier.** { *; }

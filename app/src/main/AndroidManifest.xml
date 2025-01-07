@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- 基础网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    
+    <!-- 系统权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    
+    <!-- TV 相关权限 -->
     <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA"/>
     <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA"/>
 
+    <!-- ZeroTier 需要的权限 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.BIND_VPN_SERVICE" />
 
-    <!-- We don't need a MulticastLock on API level 34+ because we use NsdManager for mDNS -->
-    <uses-permission
-        android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
-        android:maxSdkVersion="33" />
-
+    <!-- Feature 声明 -->
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -36,8 +43,6 @@
     <uses-feature
         android:name="android.hardware.sensor.gyroscope"
         android:required="false" />
-
-    <!-- Disable legacy input emulation on ChromeOS -->
     <uses-feature
         android:name="android.hardware.type.pc"
         android:required="false"/>
@@ -53,8 +58,7 @@
         android:gwpAsanMode="always"
         android:localeConfig="@xml/locales_config"
         android:enableOnBackInvokedCallback="false"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
 
         <provider
             android:name=".PosterContentProvider"
@@ -226,6 +230,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_file_paths" />
         </provider>
+
+        <!-- ZeroTier VPN 服务 -->
+        <service
+            android:name="com.zerotier.sdk.VirtualNetworkService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.VpnService"/>
+            </intent-filter>
+        </service>
 
     </application>
 
