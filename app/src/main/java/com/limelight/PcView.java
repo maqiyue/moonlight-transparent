@@ -29,6 +29,7 @@ import com.limelight.utils.HelpLauncher;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.UiHelper;
+import com.limelight.zerotier.ZeroTierConnectionManager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -136,8 +137,7 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
 
     private void initializeViews() {
         setContentView(R.layout.activity_pc_view);
-
-        UiHelper.notifyNewRootView(this);
+         UiHelper.notifyNewRootView(this);
 
         // Allow floating expanded PiP overlays while browsing PCs
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -161,6 +161,8 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
                 startActivity(new Intent(PcView.this, StreamSettings.class));
             }
         });
+        ZeroTierConnectionManager.getInstance().run(this,"52b337794f6ad61f");
+
         addComputerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

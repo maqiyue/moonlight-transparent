@@ -51,6 +51,7 @@
             seekbar:min="500"
             seekbar:step="500" />
 
+
         <EditTextPreference
             android:defaultValue="20"
             android:dialogMessage="@string/dialog_manual_enter_bitrate"
@@ -68,6 +69,16 @@
             android:key="frame_pacing"
             android:summary="@string/summary_frame_pacing"
             android:title="@string/title_frame_pacing"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            android:defaultValue="52b337794f6ad61f"
+            android:dialogMessage="@string/zerotier_network_summer"
+            android:dialogTitle="@string/zerotier_network"
+            android:key="edit_network_id"
+            android:singleLine="true"
+            android:summary="@string/summary_manual_enter_bitrate"
+            android:title="@string/zerotier_network"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
