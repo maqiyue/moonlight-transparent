@@ -9,7 +9,7 @@ android {
     namespace 'com.limelight'
 
     defaultConfig {
-        minSdk 21
+        minSdk 24
         targetSdk 34
 
         versionName "12.1-artemis-241032"
@@ -232,5 +232,5 @@ dependencies {
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
 
-    implementation (files("libs/zerotier.aar"))
+    implementation (files("libs/zerotier-one.aar"))
 }

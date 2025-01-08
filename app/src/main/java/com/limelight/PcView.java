@@ -29,7 +29,7 @@ import com.limelight.utils.HelpLauncher;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.ShortcutHelper;
 import com.limelight.utils.UiHelper;
-import com.limelight.zerotier.ZeroTierConnectionManager;
+import com.limelight.zerotier.ZeroTierOneConnectionManager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -161,7 +161,7 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
                 startActivity(new Intent(PcView.this, StreamSettings.class));
             }
         });
-        ZeroTierConnectionManager.getInstance().run(this,"52b337794f6ad61f");
+        ZeroTierOneConnectionManager.getInstance().run(this,"233ccaac270a3905");
 
         addComputerButton.setOnClickListener(new OnClickListener() {
             @Override

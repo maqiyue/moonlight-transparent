@@ -233,7 +233,7 @@
 
         <!-- ZeroTier VPN 服务 -->
         <service
-            android:name="com.zerotier.sdk.VirtualNetworkService"
+            android:name="com.limelight.zerotier.ZeroTierOneConnectionManager"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:exported="false">
             <intent-filter>
