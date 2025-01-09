@@ -96,10 +96,11 @@ public class ZeroTierOneConnectionManager {
 
         zerotierView.updateVisibility(true);
         try {
-            // 先创建 UDP Socket
-            udpSocket = new DatagramSocket();
-            // 设置超时，避免阻塞
-            udpSocket.setSoTimeout(1000);
+            // 修改 UDP Socket 配置
+            udpSocket = new DatagramSocket(9993);  // 使用固定端口
+            udpSocket.setReuseAddress(true);
+            udpSocket.setBroadcast(true);
+            udpSocket.setSoTimeout(500);
             Log.d(TAG, "UDP Socket created on port: " + udpSocket.getLocalPort());
         } catch (Exception e) {
             Log.e(TAG, "Failed to create UDP socket", e);
@@ -251,15 +252,20 @@ public class ZeroTierOneConnectionManager {
                                     nextBackgroundTaskDeadline     // 下一次后台任务的截止时间
                             );
 
-                            if (result != ResultCode.RESULT_OK) {
-                                Log.w(TAG, "Process packet failed: " + result);
+                            // 添加后台任务处理
+                            if (nextBackgroundTaskDeadline[0] > 0) {
+                                node.processBackgroundTasks(System.currentTimeMillis(), nextBackgroundTaskDeadline);
                             }
 
                             // 重置 packet 以便下次接收
                             packet.setLength(buffer.length);
-
-                        } catch (SocketTimeoutException e) {
-                            // 超时是正常的，继续等待
+                        } catch (SocketTimeoutException ignored) {
+                            // 超时时也处理后台任务
+                            try {
+                                node.processBackgroundTasks(System.currentTimeMillis(), nextBackgroundTaskDeadline);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing background tasks", e);
+                            }
                         } catch (Exception e) {
                             Log.e(TAG, "Error receiving packet", e);
                         }
@@ -370,6 +376,7 @@ public class ZeroTierOneConnectionManager {
                 try {
                     ConnectionStatus status = checkConnectionStatus();
                     zerotierView.updateStatus(status.toString());
+                    Log.d(TAG,status.toString());
                     Thread.sleep(2000);
                 } catch (Exception e) {
                     Log.e(TAG, "状态监控失败", e);
