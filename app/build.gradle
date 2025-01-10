@@ -232,5 +232,8 @@ dependencies {
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
 
-    implementation (files("libs/zerotier-one.aar"))
+    implementation (files("libs/zerotier-one-1.12.2.aar"))
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    implementation 'org.greenrobot:eventbus:3.2.0'
 }

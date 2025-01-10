@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     
     <!-- TV 相关权限 -->
     <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA"/>
@@ -233,14 +234,13 @@
 
         <!-- ZeroTier VPN 服务 -->
         <service
-            android:name=".zerotier.ZeroTierOneConnectionManager"
+            android:name=".zerotier.service.ZeroTierOneService"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.net.VpnService"/>
+                <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
-        <service android:name="com.limelight.zerotier.ZeroTierVpnService" />
 
     </application>
 
