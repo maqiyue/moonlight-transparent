@@ -119,35 +119,6 @@ public class NetworkConfig {
     }
 
 
-    public static class NetworkTypeConverter implements PropertyConverter<NetworkType, Integer> {
-        public NetworkType convertToEntityProperty(Integer num) {
-            if (num == null) {
-                return null;
-            }
-            return NetworkType.fromInt(num);
-        }
 
-        public Integer convertToDatabaseValue(NetworkType networkType) {
-            if (networkType == null) {
-                return null;
-            }
-            return networkType.toInt();
-        }
-    }
 
-    public static class NetworkStatusConverter implements PropertyConverter<NetworkStatus, Integer> {
-        public NetworkStatus convertToEntityProperty(Integer num) {
-            if (num == null) {
-                return null;
-            }
-            return NetworkStatus.fromInt(num);
-        }
-
-        public Integer convertToDatabaseValue(NetworkStatus networkStatus) {
-            if (networkStatus == null) {
-                return null;
-            }
-            return networkStatus.toInt();
-        }
-    }
 }

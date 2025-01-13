@@ -2,7 +2,6 @@ package com.limelight.zerotier.model.type;
 
 import com.zerotier.sdk.VirtualNetworkStatus;
 
-import com.limelight.zerotier.R;
 
 public enum NetworkStatus {
     REQUESTING_CONFIGURATION(0), OK(1), ACCESS_DENIED(2), NOT_FOUND(3), PORT_ERROR(4), CLIENT_TOO_OLD(5), AUTHENTICATION_REQUIRED(6);

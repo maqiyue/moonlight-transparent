@@ -1,6 +1,7 @@
 package com.limelight.zerotier.db;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +14,8 @@ import com.limelight.zerotier.model.AssignedAddress;
 import com.limelight.zerotier.model.DnsServer;
 import com.limelight.zerotier.model.Network;
 import com.limelight.zerotier.model.NetworkConfig;
+import com.limelight.zerotier.model.type.NetworkStatus;
+import com.limelight.zerotier.model.type.NetworkType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +111,7 @@ public class ZTDatabase {
     }
 
     // Network相关操作
+    @SuppressLint("Range")
     public Network getNetworkById(long networkId) {
         readLock.lock();
         try {
@@ -144,6 +148,7 @@ public class ZTDatabase {
         }
     }
 
+    @SuppressLint("Range")
     public List<AppNode> getAllAppNodes() {
         readLock.lock();
         try {
@@ -164,6 +169,7 @@ public class ZTDatabase {
         }
     }
 
+    @SuppressLint("Range")
     public List<Network> getLastActivatedNetworks() {
         readLock.lock();
         try {
@@ -193,7 +199,7 @@ public class ZTDatabase {
             ContentValues values = new ContentValues();
             values.put("networkId", network.getNetworkId());
             values.put("networkName", network.getNetworkName());
-            values.put("lastActivated", network.getLastActivated() ? 1 : 0);
+            values.put("lastActivated", network.isLastActivated() ? 1 : 0);
             values.put("networkConfigId", network.getNetworkConfigId());
 
             db.insertWithOnConflict("network", null, values, SQLiteDatabase.CONFLICT_REPLACE);
@@ -217,16 +223,15 @@ public class ZTDatabase {
         try {
             ContentValues values = new ContentValues();
             values.put("id", config.getId());
-            values.put("routeViaZeroTier", config.getRouteViaZeroTier() ? 1 : 0);
+            values.put("routeViaZeroTier", config.isRouteViaZeroTier() ? 1 : 0);
             values.put("dnsMode", config.getDnsMode());
-            NetworkConfig.NetworkTypeConverter typeConverter = new NetworkConfig.NetworkTypeConverter();
-            NetworkConfig.NetworkStatusConverter statusConverter = new NetworkConfig.NetworkStatusConverter();
-            values.put("type", typeConverter.convertToDatabaseValue(config.getType()));
-            values.put("status", statusConverter.convertToDatabaseValue(config.getStatus()));
+
+            values.put("type", config.getType().toInt());
+            values.put("status", config.getStatus().toInt());
             values.put("mac", config.getMac());
             values.put("mtu", config.getMtu());
-            values.put("broadcast", config.getBroadcast() ? 1 : 0);
-            values.put("bridging", config.getBridging() ? 1 : 0);
+            values.put("broadcast", config.isBroadcast() ? 1 : 0);
+            values.put("bridging", config.isBridging() ? 1 : 0);
 
             db.insertWithOnConflict("network_config", null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } finally {
@@ -244,6 +249,7 @@ public class ZTDatabase {
         }
     }
 
+    @SuppressLint("Range")
     public NetworkConfig getNetworkConfig(long id) {
         readLock.lock();
         try {
@@ -258,10 +264,8 @@ public class ZTDatabase {
                 config.setId(cursor.getLong(cursor.getColumnIndex("id")));
                 config.setRouteViaZeroTier(cursor.getInt(cursor.getColumnIndex("routeViaZeroTier")) == 1);
                 config.setDnsMode(cursor.getInt(cursor.getColumnIndex("dnsMode")));
-                NetworkConfig.NetworkTypeConverter typeConverter = new NetworkConfig.NetworkTypeConverter();
-                NetworkConfig.NetworkStatusConverter statusConverter = new NetworkConfig.NetworkStatusConverter();
-                config.setType(typeConverter.convertToEntityProperty(cursor.getInt(cursor.getColumnIndex("type"))));
-                config.setStatus(statusConverter.convertToEntityProperty(cursor.getInt(cursor.getColumnIndex("status"))));
+                config.setType(NetworkType.fromInt(cursor.getInt(cursor.getColumnIndex("type"))));
+                config.setStatus(NetworkStatus.fromInt(cursor.getInt(cursor.getColumnIndex("status"))));
                 config.setMac(cursor.getString(cursor.getColumnIndex("mac")));
                 config.setMtu(cursor.getString(cursor.getColumnIndex("mtu")));
                 config.setBroadcast(cursor.getInt(cursor.getColumnIndex("broadcast")) == 1);
@@ -274,6 +278,7 @@ public class ZTDatabase {
         }
     }
 
+    @SuppressLint("Range")
     public List<DnsServer> getDnsServers(long networkConfigId) {
         readLock.lock();
         try {
@@ -316,6 +321,7 @@ public class ZTDatabase {
         }
     }
 
+    @SuppressLint("Range")
     public List<AssignedAddress> getAssignedAddresses(long networkConfigId) {
         readLock.lock();
         try {
@@ -330,7 +336,7 @@ public class ZTDatabase {
                 address.setId(cursor.getLong(cursor.getColumnIndex("id")));
                 address.setNetworkId(networkConfigId);
                 address.setAddressString(cursor.getString(cursor.getColumnIndex("addressString")));
-                address.setPrefix(cursor.getInt(cursor.getColumnIndex("prefix")));
+                address.setPrefix((short) cursor.getInt(cursor.getColumnIndex("prefix")));
                 addresses.add(address);
             }
             cursor.close();

@@ -359,13 +359,13 @@ public class ZeroTierOneService extends VpnService implements Runnable, EventLis
 
         if (currentNetworkInfo == NetworkInfoUtils.CurrentConnection.CONNECTION_NONE) {
             // 未连接网络
-            Toast.makeText(this, "未连接网络").show();
+            Toast.makeText(this, "未连接网络", Toast.LENGTH_SHORT).show();
             stopSelf(this.mStartID);
             return START_NOT_STICKY;
         } else if (currentNetworkInfo == NetworkInfoUtils.CurrentConnection.CONNECTION_MOBILE &&
                 !useCellularData) {
             // 使用移动网络，但未在设置中允许移动网络访问
-            Toast.makeText(this, R.string.toast_mobile_data, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "请在设置中允许移动网络访问", Toast.LENGTH_LONG).show();
             stopSelf(this.mStartID);
             return START_NOT_STICKY;
         }
@@ -949,7 +949,7 @@ public class ZeroTierOneService extends VpnService implements Runnable, EventLis
         // 建立 VPN 连接
         this.vpnSocket = builder.establish();
         if (this.vpnSocket == null) {
-            this.eventBus.post(new VPNErrorEvent(getString(R.string.toast_vpn_application_not_prepared)));
+            this.eventBus.post(new VPNErrorEvent("VPN 应用未准备就绪"));
             return false;
         }
         this.in = new FileInputStream(this.vpnSocket.getFileDescriptor());
@@ -963,8 +963,8 @@ public class ZeroTierOneService extends VpnService implements Runnable, EventLis
             this.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         if (Build.VERSION.SDK_INT >= 26) {
-            String channelName = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
+            String channelName = "ZeroTier VPN 服务";
+            String description = "ZeroTier VPN 服务运行状态通知";
             var channel = new NotificationChannel(
                     Constants.CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription(description);
@@ -983,10 +983,8 @@ public class ZeroTierOneService extends VpnService implements Runnable, EventLis
         var notification = new NotificationCompat.Builder(this, Constants.CHANNEL_ID)
                 .setPriority(1)
                 .setOngoing(true)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(getString(R.string.notification_title_connected))
-                .setContentText(getString(R.string.notification_text_connected, network.getNetworkIdStr()))
-                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.zerotier_orange))
+                .setContentTitle("ZeroTier VPN 已连接")
+                .setContentText("已连接到网络: " + network.getNetworkIdStr())
                 .setContentIntent(pendingIntent).build();
         this.notificationManager.notify(ZT_NOTIFICATION_TAG, notification);
         Log.i(TAG, "ZeroTier One Connected");

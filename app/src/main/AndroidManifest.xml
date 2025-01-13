@@ -20,7 +20,6 @@
 
     <!-- ZeroTier 需要的权限 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission android:name="android.permission.BIND_VPN_SERVICE" />
 
     <!-- Feature 声明 -->
     <uses-feature
