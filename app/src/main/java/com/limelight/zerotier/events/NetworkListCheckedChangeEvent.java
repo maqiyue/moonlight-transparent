@@ -2,8 +2,6 @@ package com.limelight.zerotier.events;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import com.limelight.zerotier.model.Network;
-
 import lombok.Data;
 
 /**
@@ -13,5 +11,4 @@ import lombok.Data;
 public class NetworkListCheckedChangeEvent {
     private final SwitchCompat switchHandle;
     private final boolean checked;
-    private final Network selectedNetwork;
 }

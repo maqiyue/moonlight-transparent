@@ -127,7 +127,7 @@ public class TunTapAdapter implements VirtualNetworkFrameListener {
                             boolean noDataBeenRead = true;
                             int readCount = TunTapAdapter.this.in.read(buffer.array());
                             if (readCount > 0) {
-                                Log.d(TunTapAdapter.TAG, "Sending packet to ZeroTier. " + readCount + " bytes.");
+                               // Log.d(TunTapAdapter.TAG, "Sending packet to ZeroTier. " + readCount + " bytes.");
                                 var readData = new byte[readCount];
                                 System.arraycopy(buffer.array(), 0, readData, 0, readCount);
                                 byte iPVersion = IPPacketUtils.getIPVersion(readData);

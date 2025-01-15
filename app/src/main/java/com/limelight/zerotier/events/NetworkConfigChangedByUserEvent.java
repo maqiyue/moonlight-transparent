@@ -1,6 +1,5 @@
 package com.limelight.zerotier.events;
 
-import com.limelight.zerotier.model.Network;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,5 +10,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class NetworkConfigChangedByUserEvent {
-    private final Network network;
+
 }

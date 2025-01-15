@@ -11,11 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.limelight.zerotier.db.ZTDatabase;
-import com.limelight.zerotier.model.Network;
-import com.limelight.zerotier.model.NetworkConfig;
-import com.limelight.zerotier.model.type.NetworkStatus;
-import com.limelight.zerotier.model.type.NetworkType;
+
 import com.limelight.zerotier.service.ZeroTierOneService;
 import com.limelight.zerotier.util.Constants;
 import com.limelight.zerotier.util.NetworkInfoUtils;
@@ -94,26 +90,14 @@ public class ZeroTierOneConnectionManager {
      */
     public void run(Activity activity, String networkIdHex) {
         this.activity = activity;
-
+ZeroTierView zeroTierView =new ZeroTierView(activity);
 long networkId;
         try {
             networkId = Long.parseLong(networkIdHex, 16);
-            // 初始化网络数据
-            initNetworkData(networkId, networkIdHex);
+
         } catch (NumberFormatException e) {
             Log.e(TAG, "init network error", e);
             Toast.makeText(activity, "网络ID格式错误", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 检查网络环境
-        var preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        boolean useCellularData = preferences.getBoolean(Constants.PREF_NETWORK_USE_CELLULAR_DATA, false);
-        var currentNetworkInfo = NetworkInfoUtils.getNetworkInfoCurrentConnection(activity);
-
-        if (currentNetworkInfo == NetworkInfoUtils.CurrentConnection.CONNECTION_NONE) {
-            // 未连接网络
-            Toast.makeText(activity, "未连接网络", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -197,30 +181,4 @@ long networkId;
         }
     }
 
-    private void initNetworkData(long networkId, String networkIdHex) {
-        ZTDatabase db = ZTDatabase.getInstance(activity);
-
-        // 检查网络是否已存在
-        Network existNetwork = db.getNetworkById(networkId);
-        if (existNetwork != null) {
-            return;
-        }
-
-        // 创建新网络配置
-        NetworkConfig config = new NetworkConfig();
-        config.setId(networkId);
-        config.setRouteViaZeroTier(true);
-        config.setDnsMode(0);
-        config.setType(NetworkType.PRIVATE);
-        config.setStatus(NetworkStatus.REQUESTING_CONFIGURATION);
-        db.saveNetworkConfig(config);
-
-        // 创建网络
-        Network network = new Network();
-        network.setNetworkId(networkId);
-        network.setNetworkIdStr(networkIdHex);
-        network.setNetworkConfigId(networkId);
-        network.setLastActivated(true);
-        db.saveNetwork(network);
-    }
 }

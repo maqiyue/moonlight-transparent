@@ -1,9 +1,6 @@
 package com.limelight.zerotier.events;
 
 import com.zerotier.sdk.VirtualNetworkConfig;
-
-import com.limelight.zerotier.model.Network;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,6 +11,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class NetworkReconfigureEvent {
     private final boolean changed;
-    private final Network network;
     private final VirtualNetworkConfig virtualNetworkConfig;
 }
